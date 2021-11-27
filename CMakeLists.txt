@@ -3,4 +3,4 @@ project(fabryka)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(fabryka main.cpp)
+add_executable(fabryka main.cpp CarSpecification.cpp CarSpecification.h)
