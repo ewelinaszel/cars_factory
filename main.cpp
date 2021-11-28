@@ -73,6 +73,8 @@ int main() {
      * [5] Wypisz mój aktualny samochód
      * [6] Jedziemy!
      * [7] Zatrzymaj się!
+     * [8] Tankuj!
+     *
      * */
 
 
