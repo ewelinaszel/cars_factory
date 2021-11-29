@@ -11,6 +11,7 @@ void showMenu() {
     std::cout << "[5] Wypisz mój aktualny samochód" << std::endl;
     std::cout << "[6] Jedziemy!" << std::endl;
     std::cout << "[7] Zatrzymaj się!" << std::endl;
+    std::cout << "[8] Tankuj!" << std::endl;
     std::cout << "-------------------------------------" << std::endl;
 }
 
@@ -53,6 +54,9 @@ int main() {
                 break;
             case 7:
                 std::cout << "Wybrano: " << 7 << std::endl;
+                break;
+            case 8:
+                std::cout << "Wybrano: " << 8 << std::endl;
                 break;
             default:
                 std::cout << "Opcja o podanym numerze nie istnieje" << std::endl;

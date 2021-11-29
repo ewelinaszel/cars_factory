@@ -8,20 +8,27 @@
 
 #include <string>
 #include "CarSpecification.h"
-enum class State{
-    ON,
-    OFF
+
+enum class CarState {
+    DRIVING,
+    STANDING
 };
+
 class Car {
-    std:: string brand;
-    std:: string model;
+    std::string brand;
+    std::string model;
     Color color;
-    State state;
+
+    CarState state;
+    int amountOfFuel;
 public:
-    Car(const std::string &brand, const std::string &model, Color color, State state);
+    Car(const std::string &brand, const std::string &model, Color color, CarState state=CarState::STANDING, int amountOfFuel=0);
+
     void fill(int AmountOfFuel);
-    void drive();
+
     void stop();
+
+    void drive();
 };
 
 
