@@ -1,4 +1,5 @@
 #include <iostream>
+#include "Car.h"
 
 void showMenu() {
     std::cout << "-------------------------------------" << std::endl;
@@ -29,6 +30,7 @@ int main() {
     // potrzebna jest zmienna przechowująca aktualny samochód
     //
 
+    Car newcar = {"BMW", "A4", Color::BLACK};
     std::cout << "Witaj w fabryce samochodów SzeligaMotors!" << std::endl;
     while(true) {
         showMenu();
@@ -36,6 +38,7 @@ int main() {
         switch (commandNumber) {
             case 1:
                 std::cout << "Wybrano: " << 1 << std::endl;
+                std::cout<<newcar;
                 break;
             case 2:
                 std::cout << "Wybrano: " << 2 << std::endl;
@@ -62,6 +65,7 @@ int main() {
                 std::cout << "Opcja o podanym numerze nie istnieje" << std::endl;
         }
     }
+
 
     /*Wybierz opcje:
      * [1] Wypisz listę modeli samochodów

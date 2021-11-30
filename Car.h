@@ -8,6 +8,7 @@
 
 #include <string>
 #include "CarSpecification.h"
+#include<iostream>
 
 enum class CarState {
     DRIVING,
@@ -17,7 +18,7 @@ enum class CarState {
 class Car {
     std::string brand;
     std::string model;
-    Color color;
+    Color color;///dlaczego tak kazało mi zrobić ze static
 
     CarState state;
     int amountOfFuel;
@@ -29,6 +30,8 @@ public:
     void stop();
 
     void drive();
+
+    friend std::ostream & operator<<(std ::ostream & result ,const Car &car);
 };
 
 

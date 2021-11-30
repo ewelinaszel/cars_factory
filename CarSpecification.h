@@ -5,6 +5,9 @@
 #ifndef FABRYKA_CARSPECIFICATION_H
 #define FABRYKA_CARSPECIFICATION_H
 
+#include <string>
+#include <iostream>
+
 enum class Color {
     BLACK,
     WHITE,
@@ -26,6 +29,8 @@ public:
     const std::string &getModel() const;
 
     Color getColor() const;
+
+    friend inline std::ostream & operator<<(std ::ostream & result ,const Color color);
 };
 
 

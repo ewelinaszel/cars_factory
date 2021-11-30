@@ -50,3 +50,24 @@ Car::Car(const std::string &brand, const std::string &model, Color color, CarSta
                                                                                                               amountOfFuel(
                                                                                                                       amountOfFuel) {}
 
+std::ostream &operator<<(std::ostream &result, const Car &car) {
+    //result<<"Samochód o numerze: ";
+    //TODO: numer id dopisać
+    //result<<;
+    result<< "Marka samochodu to:";
+    result<<car.brand;
+    result<<"\nKolor:";
+    CarSpecification::result<<car.color;
+    result<<"\nModel samochodu:";
+    result<<car.model;
+    result<<"\nAktualna ilość paliwa wynosi:";
+    result<<car.amountOfFuel;
+    if(car.state == CarState::DRIVING){
+        result<<"\nSamochód jest w ruchu.\n";
+    }
+    else{
+        result<<"\nSamochód stoi.\n";
+    }
+    return result;
+}
+

@@ -21,3 +21,14 @@ Color CarSpecification::getColor() const {
     return color;
 }
 
+std::ostream &operator<<(std::ostream &result, const Color color) {
+    switch (color) {
+        case Color:: WHITE: return result << "Biały";
+        case Color:: BLACK: return result << "Czarny";
+        case Color:: GOLD: return result << "Złoty";
+        case Color:: SILVER: return result << "Srebrny";
+        case Color:: RED: return result << "Czerwony";
+    }
+
+}
+
