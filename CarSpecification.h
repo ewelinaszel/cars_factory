@@ -14,7 +14,10 @@ enum class Color {
     GOLD,
     SILVER,
     RED
+
 };
+
+std::ostream & operator<<(std ::ostream & result ,const Color color);
 
 class CarSpecification {
     std:: string brand;
@@ -30,7 +33,6 @@ public:
 
     Color getColor() const;
 
-    friend inline std::ostream & operator<<(std ::ostream & result ,const Color color);
 };
 
 

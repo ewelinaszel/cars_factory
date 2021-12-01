@@ -1,4 +1,5 @@
 #include <iostream>
+#include <deque>
 #include "Car.h"
 
 void showMenu() {
@@ -6,8 +7,8 @@ void showMenu() {
     std::cout << "Wybierz interesującą Cię opcje:" << std::endl;
     std::cout << "-------------------------------------" << std::endl;
     std::cout << "[1] Wypisz listę modeli samochodów" << std::endl;
-    std::cout << "[2] Kup samochód" << std::endl;
-    std::cout << "[3] Odbierz samochód" << std::endl;
+    std::cout << "[2] Wybierz samochód, który chcesz aby wyprodukowano:" << std::endl;
+    std::cout << "[3] Kup samochód" << std::endl;
     std::cout << "[4] Wypisz fabrykę (wypisz obecny stan fabryki - prawdopodobnie listę pojazdów wyprodukowanych)" << std::endl;
     std::cout << "[5] Wypisz mój aktualny samochód" << std::endl;
     std::cout << "[6] Jedziemy!" << std::endl;
@@ -30,7 +31,7 @@ int main() {
     // potrzebna jest zmienna przechowująca aktualny samochód
     //
 
-    Car newcar = {"BMW", "A4", Color::BLACK};
+    Car newcar = {"BMW", "Seria 3", Color::BLACK};
     std::cout << "Witaj w fabryce samochodów SzeligaMotors!" << std::endl;
     while(true) {
         showMenu();
@@ -38,7 +39,6 @@ int main() {
         switch (commandNumber) {
             case 1:
                 std::cout << "Wybrano: " << 1 << std::endl;
-                std::cout<<newcar;
                 break;
             case 2:
                 std::cout << "Wybrano: " << 2 << std::endl;
@@ -48,18 +48,25 @@ int main() {
                 break;
             case 4:
                 std::cout << "Wybrano: " << 4 << std::endl;
+                std::cout<<newcar;
                 break;
             case 5:
                 std::cout << "Wybrano: " << 5 << std::endl;
                 break;
             case 6:
                 std::cout << "Wybrano: " << 6 << std::endl;
+                newcar.drive();
                 break;
             case 7:
                 std::cout << "Wybrano: " << 7 << std::endl;
+                newcar.stop();
                 break;
             case 8:
                 std::cout << "Wybrano: " << 8 << std::endl;
+                int amountofFuel;
+                std::cout<<"Podaj ilość substancji napędowej:"<<std::endl;
+                std::cin>>amountofFuel;
+                newcar.fill(amountofFuel);
                 break;
             default:
                 std::cout << "Opcja o podanym numerze nie istnieje" << std::endl;

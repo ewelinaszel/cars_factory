@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include "Car.h"
+#include "CarSpecification.h"
 
 void Car::fill(int AmountOfFuel) {
     //todo std::cout usage here is temporary - this method should not print anything to stdout
@@ -42,13 +43,11 @@ void Car::stop() {
 }
 
 //todo should I define default parameters values as it is in *.h file
-Car::Car(const std::string &brand, const std::string &model, Color color, CarState state, int amountOfFuel) : brand(
-        brand),
+Car::Car(const std::string &brand, const std::string &model, Color color, CarState state, int amountOfFuel) : brand(brand),
                                                                                                               model(model),
                                                                                                               color(color),
                                                                                                               state(state),
-                                                                                                              amountOfFuel(
-                                                                                                                      amountOfFuel) {}
+                                                                                                              amountOfFuel(amountOfFuel) {}
 
 std::ostream &operator<<(std::ostream &result, const Car &car) {
     //result<<"Samochód o numerze: ";
@@ -57,7 +56,7 @@ std::ostream &operator<<(std::ostream &result, const Car &car) {
     result<< "Marka samochodu to:";
     result<<car.brand;
     result<<"\nKolor:";
-    CarSpecification::result<<car.color;
+    result<< car.color;
     result<<"\nModel samochodu:";
     result<<car.model;
     result<<"\nAktualna ilość paliwa wynosi:";
@@ -70,4 +69,16 @@ std::ostream &operator<<(std::ostream &result, const Car &car) {
     }
     return result;
 }
+
+const std::string &Car::getBrand() const {
+    return brand;
+}
+
+Color Car::getColor() const {
+    return color;
+}
+
+const std::string &Car::getModel() const {
+    return model;
+};
 

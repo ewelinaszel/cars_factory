@@ -7,14 +7,26 @@
 
 
 #include "CarSpecification.h"
+#include "Car.h"
+#include "CarFactory.h"
 #include <vector>
 
 class SalesDepartment {
-std::vector <CarSpecification> inventoryList;
-
+    std::vector <CarSpecification> listOfAvailableModelsOfCars;
+    CarFactory carFactory;
 public:
+    SalesDepartment(const std::vector<CarSpecification> &listOfAvailableModelsOfCars, const CarFactory &carFactory);
 
+    SalesDepartment();
 
+    const std::vector<CarSpecification> &getListOfAvailableModelsOfCars() const;
+
+    void orderCar(CarSpecification carSpecification);
+
+//    Car sellcar(Car car){
+//
+//
+//    };
 };
 
 
