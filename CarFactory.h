@@ -14,9 +14,9 @@ class CarFactory {
 public:
     CarFactory();
 
-    Car createCar(CarSpecification carSpecification);
+    void createCar(const CarSpecification carSpecification);
 
-    void leaveFactory(CarSpecification carSpecification);;
+    Car* leaveFactory(const CarSpecification carSpecification);
 
 };
 

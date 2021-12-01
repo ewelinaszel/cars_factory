@@ -23,10 +23,7 @@ public:
 
     void orderCar(CarSpecification carSpecification);
 
-//    Car sellcar(Car car){
-//
-//
-//    };
+    Car sellCar(CarSpecification carSpecification);
 };
 
 

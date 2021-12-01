@@ -7,7 +7,7 @@
 
 CarFactory::CarFactory() {}
 
-Car CarFactory::createCar(CarSpecification carSpecification) {
+void CarFactory::createCar(CarSpecification carSpecification) {
 
     Car newCar = Car(
             carSpecification.getBrand(),
@@ -16,10 +16,10 @@ Car CarFactory::createCar(CarSpecification carSpecification) {
     );
 
      inventory.push_back(newCar);
-     return newCar;
 }
 
-void CarFactory::leaveFactory(CarSpecification carSpecification) {
+Car* CarFactory::leaveFactory(CarSpecification carSpecification) {
+    Car *carPointer = nullptr;
     std::vector<Car>::iterator newit;
     for(std::vector<Car>::iterator it = inventory.begin(); it != inventory.end(); ++it){
         if (carSpecification.getBrand()== (*it).getBrand() && carSpecification.getColor() == (*it).getColor() && carSpecification.getModel()== (*it).getModel()){
@@ -31,12 +31,13 @@ void CarFactory::leaveFactory(CarSpecification carSpecification) {
     }
     if (newit != inventory.end()){
         std::cout << "Element znaleziony" << std::endl;
+        carPointer = &(*newit);
         inventory.erase(newit);
     }
     else{
         std::cout << "Brak samochodu w fabryce." << std::endl;
     }
-
+    return carPointer;
 }
 
 

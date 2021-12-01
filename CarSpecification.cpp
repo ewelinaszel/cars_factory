@@ -29,6 +29,9 @@ std::ostream &operator<<(std::ostream &result, const Color color) {
         case Color:: SILVER: return result << "Srebrny";
         case Color:: RED: return result << "Czerwony";
     }
-
 }
 
+std::ostream &operator<<(std::ostream &result, const CarSpecification carSpecification) {
+    result << carSpecification.getBrand() << ", " << carSpecification.getModel() << ", " << carSpecification.getColor();
+    return result;
+}

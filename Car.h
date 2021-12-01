@@ -9,6 +9,7 @@
 #include <string>
 #include "CarSpecification.h"
 #include<iostream>
+#include <fstream>
 
 enum class CarState {
     DRIVING,
@@ -38,6 +39,8 @@ public:
     const std::string &getModel() const;
 
     Color getColor() const;
+
+
 };
 
 

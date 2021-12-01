@@ -33,6 +33,8 @@ public:
 
     Color getColor() const;
 
+    friend std::ostream &operator<<(std::ostream &result, const CarSpecification carSpecification);
+
 };
 
 
