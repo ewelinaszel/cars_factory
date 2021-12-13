@@ -2,30 +2,25 @@
 #include <deque>
 #include "Car.h"
 #include "SalesDepartment.h"
-//
-//std::ostream &operator<<(std::ostream &output_stream, Car car) {
-//    output_stream << car.getBrand() << "" << car.getModel() << "" << car.getColor();
-//    return output_stream;
-//}
-//
-//std::istream &operator>>(std::istream &input_stream, Car car) {
-//    input_stream >> car.getBrand() >> "" << car.getModel() >> "" << car.getColor();
-//    return input_stream;
-//}
+
+std::string LINE_PREFIX = "  ";
 
 void showMenu() {
     std::cout << "-------------------------------------" << std::endl;
     std::cout << "Wybierz interesującą Cię opcje:" << std::endl;
     std::cout << "-------------------------------------" << std::endl;
     std::cout << "[1] Wypisz listę modeli samochodów" << std::endl;
-    std::cout << "[2] Wybierz samochód, który chcesz aby wyprodukowano:" << std::endl;
+    std::cout << "[2] Wybierz samochód, który chcesz aby wyprodukowano" << std::endl;
     std::cout << "[3] Kup samochód" << std::endl;
-    std::cout << "[4] Wypisz fabrykę (wypisz obecny stan fabryki - prawdopodobnie listę pojazdów wyprodukowanych)"
-              << std::endl;
+    std::cout << "[4] Wypisz fabrykę" << std::endl;
     std::cout << "[5] Wypisz mój aktualny samochód" << std::endl;
     std::cout << "[6] Jedziemy!" << std::endl;
     std::cout << "[7] Zatrzymaj się!" << std::endl;
     std::cout << "[8] Tankuj!" << std::endl;
+    std::cout << "[9] Zapisz fabrykę do pliku" << std::endl;
+    std::cout << "[10] Zapisz mój samochód do pliku" << std::endl;
+    std::cout << "[11] Wczytaj fabrykę z pliku" << std::endl;
+    std::cout << "[12] Wczytaj mój samochód z pliku" << std::endl;
     std::cout << "-------------------------------------" << std::endl;
 }
 
@@ -33,17 +28,157 @@ int getCommandFromConsole() {
     int i;
     std::cout << "Podaj numer opcji: ";
     std::cin >> i;
-//    todo check if get correct i (np. >0)
     return i;
 }
 
-void writeToFile(Car car);
+struct UIContext {
+    SalesDepartment salesDepartment;
+    Car* currentCar;
+};
+
+bool checkIfCurrentCarNullptr(UIContext &uiContext) {
+    if (uiContext.currentCar == nullptr) {
+        std::cout << "Nie posiadasz aktualnie samochodu" << std::endl;
+        return true;
+    }
+    return false;
+}
+
+void showCarList(UIContext &uiContext) {
+    std::vector<CarSpecification> availableCarSpecifications = uiContext.salesDepartment.getListOfAvailableModelsOfCars();
+    int i = 0;
+    for (std::vector<CarSpecification>::iterator it = availableCarSpecifications.begin();
+        it != availableCarSpecifications.end(); ++it) {
+        std::cout << LINE_PREFIX <<"[" << ++i << "] " << *it << std::endl;
+    }
+}
+
+void produceCar(UIContext &uiContext) {
+    std::cout << "Podaj index: ";
+    int i;
+    std::cin >> i;
+
+    try {
+        CarSpecification chosenCarSpecification = uiContext.salesDepartment.getListOfAvailableModelsOfCars().at(i-1);
+        uiContext.salesDepartment.orderCar(chosenCarSpecification);
+    }
+    catch (const std::out_of_range& oor) {
+        int n = uiContext.salesDepartment.getListOfAvailableModelsOfCars().size();
+        std::cout << LINE_PREFIX <<"Niepoprawny numer specyfikacji " << i << ". Index powinien mieścić się w zakresie [1, " << n << "]" << std::endl;
+    }
+}
+
+void buyCar(UIContext &uiContext) {
+    std::cout << "Podaj index: ";
+    int i;
+    std::cin >> i;
+
+    try {
+        CarSpecification chosenCarSpecification = uiContext.salesDepartment.getListOfAvailableModelsOfCars().at(i-1);
+        uiContext.currentCar = uiContext.salesDepartment.sellCar(chosenCarSpecification);
+    }
+    catch (const std::out_of_range& oor) {
+        int n = uiContext.salesDepartment.getListOfAvailableModelsOfCars().size();
+        std::cout << LINE_PREFIX <<"Niepoprawny numer specyfikacji " << i << ". Index powinien mieścić się w zakresie [1, " << n << "]" << std::endl;
+    }
+}
+
+void showInventory(UIContext &uiContext) {
+    std::cout << uiContext.salesDepartment.getCarFactory();
+}
+
+void showMyCar(UIContext &uiContext){
+    if(checkIfCurrentCarNullptr(uiContext)){ return; }
+    std::cout << *uiContext.currentCar << std::endl;
+}
+
+void startMyCar(UIContext &uiContext){
+    if(checkIfCurrentCarNullptr(uiContext)){ return; }
+    uiContext.currentCar->drive();
+}
+
+void stopMyCar(UIContext &uiContext){
+    if(checkIfCurrentCarNullptr(uiContext)){ return; }
+    uiContext.currentCar->stop();
+}
+
+void fillMyCar(UIContext &uiContext){
+    if(checkIfCurrentCarNullptr(uiContext)){ return; }
+    int amountOfFuel;
+    std::cout << "Podaj ilość substancji napędowej:" << std::endl;
+    std::cin >> amountOfFuel;
+    uiContext.currentCar->fill(amountOfFuel);
+}
+
+void saveMyFactoryToFile(UIContext &uiContext){
+    std::string fileName;
+    std::cout << "Podaj nazwę pliku" << std::endl;
+    std::cin >> fileName;
+
+    std::ofstream file;
+    file.open (fileName, std::ofstream::out);
+
+    file << uiContext.salesDepartment.getCarFactory();
+    file.close();
+    std::cout << "Zapis zakończony powodzeniem" << std::endl;
+}
+
+void saveMyCarToFile(UIContext &uiContext){
+    if(checkIfCurrentCarNullptr(uiContext)){ return; }
+
+    std::string fileName;
+    std::cout << "Podaj nazwę pliku" << std::endl;
+    std::cin >> fileName;
+
+    std::ofstream file;
+    file.open (fileName, std::ofstream::out);
+    file << *uiContext.currentCar;
+    file.close();
+}
+
+void readMyFactoryFromFile(UIContext &uiContext){
+    std::string fileName;
+    std::cout << "Podaj nazwę pliku" << std::endl;
+    std::cin >> fileName;
+
+    std::ifstream file;
+    file.open(fileName, std::ofstream::in);
+
+    if(!file) {
+        std::cout << "Plik nie istnieje. Nie można wczytać fabryki." << std::endl;
+        return;
+    }
+
+    CarFactory *carFactoryFromFile = new CarFactory();
+    file >> *carFactoryFromFile;
+    file.close();
+
+    uiContext.salesDepartment.setCarFactory(*carFactoryFromFile);
+}
+
+void readMyCarFromFile(UIContext &uiContext){
+    std::string fileName;
+    std::cout << "Podaj nazwę pliku" << std::endl;
+    std::cin >> fileName;
+
+    std::ifstream file;
+    file.open(fileName, std::ofstream::in);
+
+    if(!file) {
+        std::cout << "Plik nie istnieje. Nie można wczytać samochodu." << std::endl;
+        return;
+    }
+
+    Car* carFromFile = new Car();
+    file >> *carFromFile;
+    file.close();
+    uiContext.currentCar = carFromFile;
+}
 
 int main() {
 
-    //trzeba zbudować całą strukturę obietków...
-    CarSpecification specification1{"BMW", "Seria 3", Color::BLACK};
-    CarSpecification specification2{"Mercedes-Benz", "E klasa", Color::WHITE};
+    CarSpecification specification1{"BMW", "Seria-3", Color::BLACK};
+    CarSpecification specification2{"Mercedes-Benz", "E-klasa", Color::WHITE};
     CarSpecification specification3{"Audi", "A4", Color::SILVER};
     CarSpecification specification4{"Chevrolet", "Captiva", Color::GOLD};
 
@@ -53,106 +188,54 @@ int main() {
 
     Car *currentCar = nullptr;
 
+    UIContext uiContext;
+    uiContext.salesDepartment = salesDepartment;
+    uiContext.currentCar = currentCar;
 
     std::cout << "Witaj w fabryce samochodów SzeligaMotors!" << std::endl;
     while (true) {
         showMenu();
         int commandNumber = getCommandFromConsole();
         switch (commandNumber) {
-            case 1: {
-//                std::cout << "Wybrano: " << 1 << std::endl;
-                std::vector<CarSpecification> availableCarSpecifications = salesDepartment.getListOfAvailableModelsOfCars();
-                for (std::vector<CarSpecification>::iterator it = availableCarSpecifications.begin();
-                     it != availableCarSpecifications.end(); ++it) {
-                    std::cout << *it << std::endl;
-                }
+            case 1:
+                showCarList(uiContext);
                 break;
-            }
-            case 2: {
-//                std::cout << "Wybrano: " << 2 << std::endl;
-                std::cout << "Podaj index: ";
-                int i;
-                std::cin >> i;
-                CarSpecification chosenCarSpecification = salesDepartment.getListOfAvailableModelsOfCars().at(i);
-                salesDepartment.orderCar(chosenCarSpecification);
+            case 2:
+                produceCar(uiContext);
                 break;
-            }
-            case 3: {
-//                std::cout << "Wybrano: " << 2 << std::endl;
-                std::cout << "Podaj index: ";
-                int i;
-                std::cin >> i;
-                CarSpecification chosenCarSpecification = salesDepartment.getListOfAvailableModelsOfCars().at(i);
-                *currentCar = salesDepartment.sellCar(chosenCarSpecification);
+            case 3:
+                buyCar(uiContext);
                 break;
-            }
             case 4:
-                std::cout << "Wybrano: " << 4 << std::endl;
+                showInventory(uiContext);
                 break;
             case 5:
-                std::cout << "Wybrano: " << 5 << std::endl;
-                std::cout << currentCar;
+                showMyCar(uiContext);
                 break;
             case 6:
-                std::cout << "Wybrano: " << 6 << std::endl;
-                if(currentCar == nullptr) {
-                    std::cout << "Nie posiadasz samochodu!" << std::endl;
-                }
-                currentCar->drive();
+                startMyCar(uiContext);
                 break;
             case 7:
-                std::cout << "Wybrano: " << 7 << std::endl;
-                if(currentCar == nullptr) {
-                    std::cout << "Nie posiadasz samochodu!" << std::endl;
-                }
-                currentCar->stop();
+                stopMyCar(uiContext);
                 break;
             case 8:
-                std::cout << "Wybrano: " << 8 << std::endl;
-                if(currentCar == nullptr) {
-                    std::cout << "Nie posiadasz samochodu!" << std::endl;
-                }
-                int amountofFuel;
-                std::cout << "Podaj ilość substancji napędowej:" << std::endl;
-                std::cin >> amountofFuel;
-                currentCar->fill(amountofFuel);
+                fillMyCar(uiContext);
+                break;
+            case 9:
+                saveMyFactoryToFile(uiContext);
+                break;
+            case 10:
+                saveMyCarToFile(uiContext);
+                break;
+            case 11:
+                readMyFactoryFromFile(uiContext);
+                break;
+            case 12:
+                readMyCarFromFile(uiContext);
                 break;
             default:
                 std::cout << "Opcja o podanym numerze nie istnieje" << std::endl;
         }
     }
-
-
-    /*Wybierz opcje:
-     * [1] Wypisz listę modeli samochodów
-     *     1. Bmw seria 3 2.0 benzyna L +klima
-     *     2. Audi A4 1.8T beznyna M
-     *     3. Bentley Azuro 3.2 benzyna + LPG XXL +barek pełen procentów
-     * [2] Kup samochód
-     *     podaj numer: ___ 3
-     *     xxx56
-     * [3] Odbierz samochód
-     *     podaj numer seryjny: ___  xxx56
-     * [4] Wypisz fabrykę (wypisz obecny stan fabryki - prawdopodobnie listę pojazdów wyprodukowanych)
-     * [5] Wypisz mój aktualny samochód
-     * [6] Jedziemy!
-     * [7] Zatrzymaj się!
-     * [8] Tankuj!
-     *
-     * */
-
-
     return 0;
 }
-//
-//void writeToFile(Car car) {
-//    std::string nameOfFile{temptext.txt};
-//    std::ofstream stream(nameOfFile);
-//    if (!stream) {
-//        std::cout << ("Blad otwarcia pliku do zapisu");
-//    } else {
-//        stream << car;
-//
-//    }
-//
-//};

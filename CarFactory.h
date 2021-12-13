@@ -2,8 +2,8 @@
 // Created by Ewelina Szeliga on 28.11.2021.
 //
 
-#ifndef FABRYKA_CARFACTORY_H
-#define FABRYKA_CARFACTORY_H
+#ifndef SZELIGAEWELINA_ETAP1_CARFACTORY_H
+#define SZELIGAEWELINA_ETAP1_CARFACTORY_H
 
 
 #include <vector>
@@ -14,18 +14,15 @@ class CarFactory {
 public:
     CarFactory();
 
+    ~CarFactory();
+
     void createCar(const CarSpecification carSpecification);
 
     Car* leaveFactory(const CarSpecification carSpecification);
 
+    friend std::ostream &operator<<(std::ostream &result, const CarFactory &carFactory);
+    friend std::ofstream &operator<<(std::ofstream &result, const CarFactory &carFactory);
+    friend std::ifstream & operator >> (std::ifstream &result, CarFactory &carFactory);
 };
 
-/*todo: 1. Usunąć produced cars z car factory
-        2. Inventory powinno zawierać cars zamiast specyfikacji (klasa SalesDepartment)
-        3. Dodać pole id do samochodu typu string
-        4. Dodać nazwę fabryki do carfactory jako pole
-        5. Dodać pole które tzryma ostatnie nadane id
-        6. Id samochodu to zlepek nazwy fabryki i liczba, ma być nadawany w metodzie createcar
-
-*/
-#endif //FABRYKA_CARFACTORY_H
+#endif //SZELIGAEWELINA_ETAP1_CARFACTORY_H

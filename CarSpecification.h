@@ -2,8 +2,8 @@
 // Created by Ewelina Szeliga on 27.11.2021.
 //
 
-#ifndef FABRYKA_CARSPECIFICATION_H
-#define FABRYKA_CARSPECIFICATION_H
+#ifndef SZELIGAEWELINA_ETAP1_CARSPECIFICATION_H
+#define SZELIGAEWELINA_ETAP1_CARSPECIFICATION_H
 
 #include <string>
 #include <iostream>
@@ -18,6 +18,8 @@ enum class Color {
 };
 
 std::ostream & operator<<(std ::ostream & result ,const Color color);
+std::istream & operator>>(std ::istream & result ,Color &color);
+
 
 class CarSpecification {
     std:: string brand;
@@ -38,4 +40,4 @@ public:
 };
 
 
-#endif //FABRYKA_CARSPECIFICATION_H
+#endif //SZELIGAEWELINA_ETAP1_CARSPECIFICATION_H

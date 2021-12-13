@@ -20,13 +20,21 @@ const std::vector<CarSpecification> &SalesDepartment::getListOfAvailableModelsOf
     return listOfAvailableModelsOfCars;
 }
 
-Car SalesDepartment::sellCar(CarSpecification carSpecification) {
+Car* SalesDepartment::sellCar(CarSpecification carSpecification) {
     Car* car = this->carFactory.leaveFactory(carSpecification);
     if (car == nullptr) {
         this->carFactory.createCar(carSpecification);
+        car = this->carFactory.leaveFactory(carSpecification);
     }
-    car = this->carFactory.leaveFactory(carSpecification);
-    return *car;
+    return car;
+}
+
+const CarFactory &SalesDepartment::getCarFactory() const {
+    return carFactory;
+}
+
+void SalesDepartment::setCarFactory(const CarFactory &carFactory) {
+    SalesDepartment::carFactory = carFactory;
 }
 
 

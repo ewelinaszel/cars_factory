@@ -2,8 +2,8 @@
 // Created by Ewelina Szeliga on 30.11.2021.
 //
 
-#ifndef FABRYKA_SALESDEPARTMENT_H
-#define FABRYKA_SALESDEPARTMENT_H
+#ifndef SZELIGAEWELINA_ETAP1_SALESDEPARTMENT_H
+#define SZELIGAEWELINA_ETAP1_SALESDEPARTMENT_H
 
 
 #include "CarSpecification.h"
@@ -23,8 +23,12 @@ public:
 
     void orderCar(CarSpecification carSpecification);
 
-    Car sellCar(CarSpecification carSpecification);
+    Car* sellCar(CarSpecification carSpecification);
+
+    const CarFactory &getCarFactory() const;
+
+    void setCarFactory(const CarFactory &carFactory);
 };
 
 
-#endif //FABRYKA_SALESDEPARTMENT_H
+#endif //SZELIGAEWELINA_ETAP1_SALESDEPARTMENT_H

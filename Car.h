@@ -2,8 +2,8 @@
 // Created by Ewelina Szeliga on 27.11.2021.
 //
 
-#ifndef FABRYKA_CAR_H
-#define FABRYKA_CAR_H
+#ifndef SZELIGAEWELINA_ETAP1_CAR_H
+#define SZELIGAEWELINA_ETAP1_CAR_H
 
 
 #include <string>
@@ -16,23 +16,26 @@ enum class CarState {
     STANDING
 };
 
+std::ostream & operator<<(std ::ostream & result ,const CarState &carState);
+
 class Car {
     std::string brand;
     std::string model;
-    Color color;///dlaczego tak kazało mi zrobić ze static
-
+    Color color;
     CarState state;
     int amountOfFuel;
 public:
     Car(const std::string &brand, const std::string &model, Color color, CarState state = CarState::STANDING, int amountOfFuel =0);
 
+    Car();
+
+    ~Car() {}; 
+
     void fill(int AmountOfFuel);
 
     void stop();
 
-    void drive();
-
-    friend std::ostream & operator<<(std ::ostream & result ,const Car &car);
+    void drive(); //
 
     const std::string &getBrand() const;
 
@@ -40,8 +43,12 @@ public:
 
     Color getColor() const;
 
+    bool isInstanceOf(const CarSpecification &carSpecification);
 
+    friend std::ostream & operator<<(std ::ostream & result ,const Car &car);
+    friend std::ofstream & operator<<(std ::ofstream & result ,const Car &car);
+    friend std::ifstream & operator >> (std::ifstream &result, Car &car);
 };
 
 
-#endif //FABRYKA_CAR_H
+#endif //SZELIGAEWELINA_ETAP1_CAR_H

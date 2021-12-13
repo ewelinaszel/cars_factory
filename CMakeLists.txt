@@ -1,6 +1,6 @@
-cmake_minimum_required(VERSION 3.20)
-project(fabryka)
+cmake_minimum_required(VERSION 3.10)
+project(SzeligaEwelina-etap1)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(fabryka main.cpp CarSpecification.cpp CarSpecification.h Car.cpp Car.h CarFactory.cpp CarFactory.h SalesDepartment.cpp SalesDepartment.h)
+add_executable(SzeligaEwelina-etap1 main.cpp CarSpecification.cpp CarSpecification.h Car.cpp Car.h CarFactory.cpp CarFactory.h SalesDepartment.cpp SalesDepartment.h)

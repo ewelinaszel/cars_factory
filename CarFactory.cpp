@@ -18,26 +18,62 @@ void CarFactory::createCar(CarSpecification carSpecification) {
      inventory.push_back(newCar);
 }
 
+//usuwanie zakupionego samochodu o danej specyfikacji z inwentarza samochodów dostępnych w fabryce
 Car* CarFactory::leaveFactory(CarSpecification carSpecification) {
     Car *carPointer = nullptr;
-    std::vector<Car>::iterator newit;
     for(std::vector<Car>::iterator it = inventory.begin(); it != inventory.end(); ++it){
-        if (carSpecification.getBrand()== (*it).getBrand() && carSpecification.getColor() == (*it).getColor() && carSpecification.getModel()== (*it).getModel()){
-            newit = it;
-        }
-        else{
-            newit = inventory.end();
+        if ((*it).isInstanceOf(carSpecification)){
+            carPointer = &(*it);
+            inventory.erase(it);
+            return carPointer;
         }
     }
-    if (newit != inventory.end()){
-        std::cout << "Element znaleziony" << std::endl;
-        carPointer = &(*newit);
-        inventory.erase(newit);
+    return nullptr;
+}
+
+std::ostream &operator<<(std::ostream &result, const CarFactory &carFactory) {
+
+    if (carFactory.inventory.empty()){
+        std::cout<<"Brak samochodów w fabryce"<<std::endl;
     }
     else{
-        std::cout << "Brak samochodu w fabryce." << std::endl;
+        for (Car car: carFactory.inventory) {
+            result<<car<<'\n';
+        }
     }
-    return carPointer;
+    return result;
 }
+
+std::ofstream &operator<<(std::ofstream &result, const CarFactory &carFactory){
+    result << carFactory.inventory.size() << "\n";
+    for (Car car: carFactory.inventory) {
+        result << car;
+    }
+    return result;
+}
+
+std::ifstream & operator >> (std::ifstream &result, CarFactory &carFactory){
+    int size;
+    result >> size;
+    std::vector<Car> inventoryFromFile;
+    for(int i=0; i<size; i++) {
+        Car* car = new Car();
+        result >> *car;
+        inventoryFromFile.push_back(*car);
+    }
+    carFactory.inventory = inventoryFromFile;
+    return result;
+}
+
+CarFactory::~CarFactory() {
+    for(std::vector<Car>::iterator it = inventory.end(); it != inventory.begin(); --it) {
+        Car* carPointer = &(*it);
+        this->inventory.erase(it);
+        delete carPointer;
+    }
+    delete &this->inventory;
+}
+
+
 
 
