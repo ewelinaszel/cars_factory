@@ -7,19 +7,19 @@
 #include "CarSpecification.h"
 
 //przeładowanie operatora wypisywania na ekran dla enum carState
-std::ostream & operator<<(std ::ostream & result ,const CarState &carState) {
+std::ostream &operator<<(std::ostream &result, const CarState &carState) {
     switch (carState) {
-        case CarState::STANDING: 
+        case CarState::STANDING:
             result << "Standing";
             break;
-        case CarState::DRIVING: 
+        case CarState::DRIVING:
             result << "Driving";
             break;
     }
     return result;
 }
 
-std::istream & operator>>(std ::istream & result, CarState &carState) {
+std::istream &operator>>(std::istream &result, CarState &carState) {
     std::string stateString;
     result >> stateString;
     if (stateString == "Standing") {
@@ -41,9 +41,11 @@ void Car::fill(int AmountOfFuel) {
     }
 }
 
-//jeżeli ilość paliwa jest większa niz 10 wywołuje sie metoda drive, gdzie przy każdym wywołaniu ilosc paliwa zmniejsza się o 10
-void Car::drive() {
-    int requiredAmountOfFuelToDrive = 10;
+void Car::drive(double distance) {
+    //todo zmienić implementacje tak aby pobierało tyle paliwa ile potrzebne jest do przejechania podanej liczby kilomentrów
+    // 80 km default, w przyszłości będzie przekazywane w parametrze
+    int requiredAmountOfFuelToDrive = (this ->fuelConsumption * distance)/100;
+
     if (this->state == CarState::DRIVING) {
         std::cout << "Pojazd juz jest w ruchu" << std::endl;
         return;
@@ -55,6 +57,7 @@ void Car::drive() {
     }
     this->amountOfFuel -= requiredAmountOfFuelToDrive;
     this->state = CarState::DRIVING;
+    this->mileage += distance;
 }
 
 void Car::stop() {
@@ -65,11 +68,23 @@ void Car::stop() {
     this->state = CarState::STANDING;
 }
 
-Car::Car(const std::string &brand, const std::string &model, Color color, CarState state, int amountOfFuel) : brand(brand),
-                                                                                                              model(model),
-                                                                                                              color(color),
-                                                                                                              state(state),
-                                                                                                              amountOfFuel(amountOfFuel) {}
+Car::Car(const std::string &brand,
+         const std::string &model,
+         Color color,
+         double fuelConsumption,
+         int bootCapacity,
+         int mileage,
+         CarState state,
+         int amountOfFuel
+         ) : brand(brand),
+                             model(model),
+                             color(color),
+                             fuelConsumption(fuelConsumption),
+                             bootCapacity(bootCapacity),
+                             mileage(mileage),
+                             state(state),
+                             amountOfFuel(amountOfFuel) {}
+
 Car::Car() {}
 
 const std::string &Car::getBrand() const {
@@ -88,7 +103,9 @@ const std::string &Car::getModel() const {
 bool Car::isInstanceOf(const CarSpecification &carSpecification) {
     return this->brand == carSpecification.getBrand() &&
            this->model == carSpecification.getModel() &&
-           this->color == carSpecification.getColor();
+           this->color == carSpecification.getColor() &&
+           this->fuelConsumption == carSpecification.getFuelConsumption() &&
+           this->bootCapacity == carSpecification.getBootCapacity();
 }
 
 //przeładowanie operatora wyświetlania na ekran
@@ -102,11 +119,20 @@ std::ostream &operator<<(std::ostream &result, const Car &car) {
     result << "\nAktualna ilość paliwa wynosi:";
     result << car.amountOfFuel;
     if (car.state == CarState::DRIVING) {
-        result << "\nSamochód jest w ruchu.\n";
+        result << "\nSamochód jest w ruchu.";
     } else {
-        result << "\nSamochód stoi.\n";
+        result << "\nSamochód stoi.";
     }
+    result << "\nSpalanie samochodu wynosi: ";
+    result << car.fuelConsumption;
+    result << "\nPojemność bagażnika wynosi:";
+    result << car.bootCapacity;
+    result << "\nPrzebieg samochodu wynosi:";
+    result << car.mileage;
+    result << "\nAktaulna ilość paliwa wynosi:";
+    result << car.amountOfFuel;
     return result;
+
 }
 
 //przeładowania operatorów zapisu do pliku i czytania z pliku
@@ -116,16 +142,40 @@ std::ofstream &operator<<(std::ofstream &result, const Car &car) {
     result << car.color << "\n";
     result << car.state << "\n";
     result << car.amountOfFuel << "\n";
+    result << car.fuelConsumption << "\n";
+    result << car.bootCapacity << "\n";
     return result;
 }
 
-std::ifstream & operator >> (std::ifstream &result, Car &car){
-    result>>car.brand;
-    result>>car.model;
-    result>>car.color;
-    result>>car.state;
-    result>>car.amountOfFuel;
+std::ifstream &operator>>(std::ifstream &result, Car &car) {
+    result >> car.brand;
+    result >> car.model;
+    result >> car.color;
+    result >> car.state;
+    result >> car.amountOfFuel;
+    result >> car.fuelConsumption;
+    result >> car.bootCapacity;
     return result;
+    }
+
+CarState Car::getState() const {
+    return state;
+}
+
+int Car::getAmountOfFuel() const {
+    return amountOfFuel;
+}
+
+double Car::getFuelConsumption() const {
+    return fuelConsumption;
+}
+
+int Car::getBootCapacity() const {
+    return bootCapacity;
+}
+
+int Car::getMileage() const {
+    return mileage;
 }
 
 

@@ -12,7 +12,9 @@ void CarFactory::createCar(CarSpecification carSpecification) {
     Car newCar = Car(
             carSpecification.getBrand(),
             carSpecification.getModel(),
-            carSpecification.getColor()
+            carSpecification.getColor(),
+            carSpecification.getFuelConsumption(),
+            carSpecification.getBootCapacity()
     );
 
      inventory.push_back(newCar);

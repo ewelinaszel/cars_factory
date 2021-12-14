@@ -5,10 +5,6 @@
 #include <string>
 #include "CarSpecification.h"
 
-CarSpecification::CarSpecification(const std::string &brand, const std::string &model, Color color) : brand(brand),
-                                                                                                      model(model),
-                                                                                                      color(color) {}
-
 const std::string &CarSpecification::getBrand() const {
     return brand;
 }
@@ -24,18 +20,26 @@ Color CarSpecification::getColor() const {
 //operator wypisywania na ekran dla typu enum
 std::ostream &operator<<(std::ostream &result, const Color color) {
     switch (color) {
-        case Color::WHITE: 
-        result << "Biały";
-        break;
-        case Color::BLACK: result << "Czarny"; break;
-        case Color::GOLD: result << "Złoty"; break;
-        case Color::SILVER: result << "Srebrny"; break;
-        case Color::RED: result << "Czerwony"; break;
+        case Color::WHITE:
+            result << "Biały";
+            break;
+        case Color::BLACK:
+            result << "Czarny";
+            break;
+        case Color::GOLD:
+            result << "Złoty";
+            break;
+        case Color::SILVER:
+            result << "Srebrny";
+            break;
+        case Color::RED:
+            result << "Czerwony";
+            break;
     }
     return result;
 }
 
-std::istream & operator>>(std ::istream & result, Color &color) {
+std::istream &operator>>(std::istream &result, Color &color) {
     std::string colorString;
     result >> colorString;
     if (colorString == "Biały") {
@@ -56,6 +60,23 @@ std::istream & operator>>(std ::istream & result, Color &color) {
 
 
 std::ostream &operator<<(std::ostream &result, const CarSpecification carSpecification) {
-    result << carSpecification.getBrand() << ", " << carSpecification.getModel() << ", " << carSpecification.getColor();
+    result << carSpecification.getBrand() << ", "
+           << carSpecification.getModel() << ", "
+           << carSpecification.getColor() << ", "
+           << carSpecification.getFuelConsumption() << "l/100km, "
+           << carSpecification.getBootCapacity() << "l";
     return result;
+}
+
+CarSpecification::CarSpecification(const std::string &brand, const std::string &model, Color color,
+                                   double fuelConsumption, int bootCapacity) : brand(brand), model(model), color(color),
+                                                                               fuelConsumption(fuelConsumption),
+                                                                               bootCapacity(bootCapacity) {}
+
+double CarSpecification::getFuelConsumption() const {
+    return fuelConsumption;
+}
+
+int CarSpecification::getBootCapacity() const {
+    return bootCapacity;
 }

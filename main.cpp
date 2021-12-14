@@ -93,8 +93,11 @@ void showMyCar(UIContext &uiContext){
 }
 
 void startMyCar(UIContext &uiContext){
+    double distance;
+    std:: cout<<"Podaj ilość kilometrów do przejechania: "<< std::endl;
+    std::cin>>distance;
     if(checkIfCurrentCarNullptr(uiContext)){ return; }
-    uiContext.currentCar->drive();
+    uiContext.currentCar->drive(distance);
 }
 
 void stopMyCar(UIContext &uiContext){
@@ -177,10 +180,10 @@ void readMyCarFromFile(UIContext &uiContext){
 
 int main() {
 
-    CarSpecification specification1{"BMW", "Seria-3", Color::BLACK};
-    CarSpecification specification2{"Mercedes-Benz", "E-klasa", Color::WHITE};
-    CarSpecification specification3{"Audi", "A4", Color::SILVER};
-    CarSpecification specification4{"Chevrolet", "Captiva", Color::GOLD};
+    CarSpecification specification1{"BMW", "Seria-3", Color::BLACK, 12.0, 150};
+    CarSpecification specification2{"Mercedes-Benz", "E-klasa", Color::WHITE, 12.5, 160};
+    CarSpecification specification3{"Audi", "A4", Color::SILVER, 9.0, 155};
+    CarSpecification specification4{"Chevrolet", "Captiva", Color::GOLD, 12.0, 360};
 
     CarFactory carFactory;
     SalesDepartment salesDepartment{

@@ -24,8 +24,21 @@ class Car {
     Color color;
     CarState state;
     int amountOfFuel;
+    double fuelConsumption;
+    int bootCapacity;
+    int mileage;
+//    TODO:  dodać przebieg
+//    TODO: odpowiednio rozszerzyć specyfikacje w main.cpp, rozszerzyć proces fabrykowania, i wszystkie inne funckje na które powyższe zmiany wpływają
 public:
-    Car(const std::string &brand, const std::string &model, Color color, CarState state = CarState::STANDING, int amountOfFuel =0);
+    Car(const std::string &brand,
+        const std::string &model,
+        Color color,
+        double fuelConsumption,
+        int bootCapacity,
+        int mileage =0,
+        CarState state = CarState::STANDING,
+        int amountOfFuel =0
+        );
 
     Car();
 
@@ -35,13 +48,23 @@ public:
 
     void stop();
 
-    void drive(); //
+    void drive(double distance);
 
     const std::string &getBrand() const;
 
     const std::string &getModel() const;
 
     Color getColor() const;
+
+    CarState getState() const;
+
+    int getAmountOfFuel() const;
+
+    double getFuelConsumption() const;
+
+    int getBootCapacity() const;
+
+    int getMileage() const;
 
     bool isInstanceOf(const CarSpecification &carSpecification);
 
