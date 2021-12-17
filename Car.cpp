@@ -42,8 +42,6 @@ void Car::fill(int AmountOfFuel) {
 }
 
 void Car::drive(double distance) {
-    //todo zmienić implementacje tak aby pobierało tyle paliwa ile potrzebne jest do przejechania podanej liczby kilomentrów
-    // 80 km default, w przyszłości będzie przekazywane w parametrze
     int requiredAmountOfFuelToDrive = (this ->fuelConsumption * distance)/100;
 
     if (this->state == CarState::DRIVING) {

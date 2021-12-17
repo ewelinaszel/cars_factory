@@ -27,8 +27,6 @@ class Car {
     double fuelConsumption;
     int bootCapacity;
     int mileage;
-//    TODO:  dodać przebieg
-//    TODO: odpowiednio rozszerzyć specyfikacje w main.cpp, rozszerzyć proces fabrykowania, i wszystkie inne funckje na które powyższe zmiany wpływają
 public:
     Car(const std::string &brand,
         const std::string &model,
