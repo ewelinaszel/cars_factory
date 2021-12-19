@@ -5,9 +5,35 @@
 #ifndef SZELIGAEWELINA_ETAP1_MOTORVEHICLE_H
 #define SZELIGAEWELINA_ETAP1_MOTORVEHICLE_H
 
+#include <string>
+#include "Vehicle.h"
 
-class MotorVehicle {
+class MotorVehicle: public Vehicle{
 
+protected:
+    std::string brand;
+    std::string model;
+    int amountOfFuel;
+    double fuelConsumption;
+    int mileage;
+
+public:
+    MotorVehicle( const std::string &brand, const std::string &model,Color color,
+                  double fuelConsumption,int capacity,CarState state, int amountOfFuel = 0, int mileage = 0);
+
+    MotorVehicle();
+
+    virtual void fill(int AmountOfFuel);
+
+    const std::string &getBrand() const;
+
+    const std::string &getModel() const;
+
+    int getAmountOfFuel() const;
+
+    double getFuelConsumption() const;
+
+    int getMileage() const;
 };
 
 

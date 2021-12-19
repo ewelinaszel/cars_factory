@@ -10,37 +10,19 @@
 #include "CarSpecification.h"
 #include<iostream>
 #include <fstream>
+#include "MotorVehicle.h"
 
-enum class CarState {
-    DRIVING,
-    STANDING
-};
+
 
 std::ostream & operator<<(std ::ostream & result ,const CarState &carState);
 
-class Car {
-    std::string brand;
-    std::string model;
-    Color color;
-    CarState state;
-    int amountOfFuel;
-    double fuelConsumption;
-    int bootCapacity;
-    int mileage;
-public:
-    Car(const std::string &brand,
-        const std::string &model,
-        Color color,
-        double fuelConsumption,
-        int bootCapacity,
-        int mileage =0,
-        CarState state = CarState::STANDING,
-        int amountOfFuel =0
-        );
+class Car: public MotorVehicle {
 
+public:
     Car();
 
-    ~Car() {}; 
+    Car(const std::string &brand, const std::string &model, Color color, double fuelConsumption,int capacity, int amountOfFuel = 0,CarState state = CarState::STANDING,
+        int mileage =0);
 
     void fill(int AmountOfFuel);
 

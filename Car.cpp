@@ -66,25 +66,6 @@ void Car::stop() {
     this->state = CarState::STANDING;
 }
 
-Car::Car(const std::string &brand,
-         const std::string &model,
-         Color color,
-         double fuelConsumption,
-         int bootCapacity,
-         int mileage,
-         CarState state,
-         int amountOfFuel
-         ) : brand(brand),
-                             model(model),
-                             color(color),
-                             fuelConsumption(fuelConsumption),
-                             bootCapacity(bootCapacity),
-                             mileage(mileage),
-                             state(state),
-                             amountOfFuel(amountOfFuel) {}
-
-Car::Car() {}
-
 const std::string &Car::getBrand() const {
     return brand;
 }
@@ -103,7 +84,7 @@ bool Car::isInstanceOf(const CarSpecification &carSpecification) {
            this->model == carSpecification.getModel() &&
            this->color == carSpecification.getColor() &&
            this->fuelConsumption == carSpecification.getFuelConsumption() &&
-           this->bootCapacity == carSpecification.getBootCapacity();
+           this->capacity == carSpecification.getBootCapacity();
 }
 
 //przeładowanie operatora wyświetlania na ekran
@@ -124,7 +105,7 @@ std::ostream &operator<<(std::ostream &result, const Car &car) {
     result << "\nSpalanie samochodu wynosi: ";
     result << car.fuelConsumption;
     result << "\nPojemność bagażnika wynosi:";
-    result << car.bootCapacity;
+    result << car.capacity;
     result << "\nPrzebieg samochodu wynosi:";
     result << car.mileage;
     result << "\nAktaulna ilość paliwa wynosi:";
@@ -141,7 +122,7 @@ std::ofstream &operator<<(std::ofstream &result, const Car &car) {
     result << car.state << "\n";
     result << car.amountOfFuel << "\n";
     result << car.fuelConsumption << "\n";
-    result << car.bootCapacity << "\n";
+    result << car.capacity << "\n";
     return result;
 }
 
@@ -152,7 +133,7 @@ std::ifstream &operator>>(std::ifstream &result, Car &car) {
     result >> car.state;
     result >> car.amountOfFuel;
     result >> car.fuelConsumption;
-    result >> car.bootCapacity;
+    result >> car.capacity;
     return result;
     }
 
@@ -168,12 +149,16 @@ double Car::getFuelConsumption() const {
     return fuelConsumption;
 }
 
-int Car::getBootCapacity() const {
-    return bootCapacity;
-}
-
 int Car::getMileage() const {
     return mileage;
 }
+
+Car::Car() {}
+
+Car::Car(const std::string &brand, const std::string &model,Color color,double fuelConsumption,int capacity,
+         int amountOfFuel, CarState state, int mileage) : MotorVehicle(brand, model,color, fuelConsumption, capacity,
+                                                                       state,amountOfFuel,mileage) {}
+
+
 
 
