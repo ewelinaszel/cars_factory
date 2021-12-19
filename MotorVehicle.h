@@ -18,8 +18,14 @@ protected:
     int mileage;
 
 public:
-    MotorVehicle( const std::string &brand, const std::string &model,Color color,
-                  double fuelConsumption,int capacity,CarState state, int amountOfFuel = 0, int mileage = 0);
+    MotorVehicle( const std::string &brand,
+                  const std::string &model,
+                  Color color,
+                  double fuelConsumption,
+                  int capacity,
+                  CarState state,
+                  int amountOfFuel,
+                  int mileage);
 
     MotorVehicle();
 

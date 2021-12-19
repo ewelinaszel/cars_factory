@@ -6,6 +6,7 @@
 #define SZELIGAEWELINA_ETAP1_VEHICLE_H
 
 #include "CarSpecification.h"
+
 enum class CarState {
     DRIVING,
     STANDING

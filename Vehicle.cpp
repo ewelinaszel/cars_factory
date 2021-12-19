@@ -16,7 +16,7 @@ int Vehicle::getCapacity() const {
     return capacity;
 }
 
-Vehicle::Vehicle(int capacity, Color color, CarState state = CarState::STANDING) : capacity(capacity), color(color), state(state) {}
+Vehicle::Vehicle(int capacity, Color color, CarState state) : capacity(capacity), color(color), state(state) {}
 
 Vehicle::Vehicle() {}
 

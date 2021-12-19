@@ -66,17 +66,7 @@ void Car::stop() {
     this->state = CarState::STANDING;
 }
 
-const std::string &Car::getBrand() const {
-    return brand;
-}
 
-Color Car::getColor() const {
-    return color;
-}
-
-const std::string &Car::getModel() const {
-    return model;
-};
 
 //sprawdzenie czy istnieje samochód o danej specyfikacji
 bool Car::isInstanceOf(const CarSpecification &carSpecification) {
@@ -123,6 +113,7 @@ std::ofstream &operator<<(std::ofstream &result, const Car &car) {
     result << car.amountOfFuel << "\n";
     result << car.fuelConsumption << "\n";
     result << car.capacity << "\n";
+    result << car.mileage << "\n";
     return result;
 }
 
@@ -134,30 +125,21 @@ std::ifstream &operator>>(std::ifstream &result, Car &car) {
     result >> car.amountOfFuel;
     result >> car.fuelConsumption;
     result >> car.capacity;
+    result >> car.mileage;
     return result;
     }
 
-CarState Car::getState() const {
-    return state;
-}
-
-int Car::getAmountOfFuel() const {
-    return amountOfFuel;
-}
-
-double Car::getFuelConsumption() const {
-    return fuelConsumption;
-}
-
-int Car::getMileage() const {
-    return mileage;
-}
-
 Car::Car() {}
 
-Car::Car(const std::string &brand, const std::string &model,Color color,double fuelConsumption,int capacity,
-         int amountOfFuel, CarState state, int mileage) : MotorVehicle(brand, model,color, fuelConsumption, capacity,
-                                                                       state,amountOfFuel,mileage) {}
+Car::Car(const std::string &brand,
+         const std::string &model,
+         Color color,
+         double fuelConsumption,
+         int capacity,
+         int amountOfFuel,
+         CarState state,
+         int mileage) :
+            MotorVehicle(brand, model,color, fuelConsumption, capacity, state,amountOfFuel,mileage) {}
 
 
 
