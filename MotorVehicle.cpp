@@ -41,14 +41,15 @@ MotorVehicle::MotorVehicle(const std::string &brand,
                            const std::string &model,
                            Color color,
                            double fuelConsumption,
-                           int capacity,
+                           int bootCapacity,
                            CarState state,
                            int amountOfFuel,
                            int mileage) :
-                                Vehicle(brand, model,capacity, color, state),
-                                fuelConsumption(fuelConsumption),
-                                amountOfFuel(amountOfFuel),
-                                mileage(mileage) {}
+        Vehicle(brand, model, color, state),
+        fuelConsumption(fuelConsumption),
+        bootCapacity(bootCapacity),
+        amountOfFuel(amountOfFuel),
+        mileage(mileage) {}
 
 void MotorVehicle::stop() {
     if (this->state == CarState::STANDING) {

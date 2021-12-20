@@ -36,7 +36,7 @@ bool Car::isInstanceOf(const CarSpecification &carSpecification) {
            this->model == carSpecification.getModel() &&
            this->color == carSpecification.getColor() &&
            this->fuelConsumption == carSpecification.getFuelConsumption() &&
-           this->capacity == carSpecification.getBootCapacity();
+           this->bootCapacity == carSpecification.getBootCapacity();
 }
 
 //przeładowanie operatora wyświetlania na ekran
@@ -57,7 +57,7 @@ std::ostream &operator<<(std::ostream &result, const Car &car) {
     result << "\nSpalanie samochodu wynosi: ";
     result << car.fuelConsumption;
     result << "\nPojemność bagażnika wynosi:";
-    result << car.capacity;
+    result << car.bootCapacity;
     result << "\nPrzebieg samochodu wynosi:";
     result << car.mileage;
     result << "\nAktaulna ilość paliwa wynosi:";
@@ -74,7 +74,7 @@ std::ofstream &operator<<(std::ofstream &result, const Car &car) {
     result << car.state << "\n";
     result << car.amountOfFuel << "\n";
     result << car.fuelConsumption << "\n";
-    result << car.capacity << "\n";
+    result << car.bootCapacity << "\n";
     result << car.mileage << "\n";
     return result;
 }
@@ -86,7 +86,7 @@ std::ifstream &operator>>(std::ifstream &result, Car &car) {
     result >> car.state;
     result >> car.amountOfFuel;
     result >> car.fuelConsumption;
-    result >> car.capacity;
+    result >> car.bootCapacity;
     result >> car.mileage;
     return result;
     }
@@ -97,11 +97,15 @@ Car::Car(const std::string &brand,
          const std::string &model,
          Color color,
          double fuelConsumption,
-         int capacity,
+         int bootCapacity,
          int amountOfFuel,
          CarState state,
          int mileage) :
-            MotorVehicle(brand, model,color, fuelConsumption, capacity, state,amountOfFuel,mileage) {}
+            MotorVehicle(brand, model,color, fuelConsumption, bootCapacity, state,amountOfFuel,mileage) {}
+
+int Car::getCapacity() {
+    return bootCapacity;
+}
 
 
 

@@ -18,17 +18,16 @@ class Vehicle {
 protected:
     std::string brand;
     std::string model;
-    int capacity;
     Color color;
     CarState state;
 public:
     Vehicle();
 
-    Vehicle(const std::string &brand, const std::string &model, int capacity, Color color, CarState state);
-
-    int getCapacity() const;
+    Vehicle(const std::string &brand, const std::string &model, Color color, CarState state);
 
     CarState getState() const;
+
+    virtual int getCapacity() = 0;
 
 };
 

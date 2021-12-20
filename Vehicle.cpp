@@ -27,10 +27,6 @@ std::istream &operator>>(std::istream &result, CarState &carState) {
     return result;
 }
 
-int Vehicle::getCapacity() const {
-    return capacity;
-}
-
 
 Vehicle::Vehicle() {}
 
@@ -38,5 +34,8 @@ CarState Vehicle::getState() const {
     return state;
 }
 
-Vehicle::Vehicle(const std::string &brand, const std::string &model, int capacity, Color color, CarState state) : brand(
-        brand), model(model), capacity(capacity), state(state), color(color) {}
+Vehicle::Vehicle(const std::string &brand, const std::string &model, Color color, CarState state) : brand(
+        brand), model(model), state(state), color(color) {}
+
+
+

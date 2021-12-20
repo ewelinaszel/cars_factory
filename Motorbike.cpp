@@ -38,7 +38,7 @@ std::ostream &operator<<(std::ostream &result, const Motorbike &motorbike) {
     result << "\nSpalanie motocykla wynosi: ";
     result << motorbike.fuelConsumption;
     result << "\nPojemność bagażnika w motocyklu wynosi:";
-    result << motorbike.capacity;
+    result << motorbike.bootCapacity;
     result << "\nPrzebieg motocykla wynosi:";
     result << motorbike.mileage;
     result << "\nAktaulna ilość paliwa wynosi:";
@@ -54,7 +54,7 @@ std::ofstream &operator<<(std::ofstream &result, const Motorbike &motorbike) {
     result << motorbike.state << "\n";
     result << motorbike.amountOfFuel << "\n";
     result << motorbike.fuelConsumption << "\n";
-    result << motorbike.capacity << "\n";
+    result << motorbike.bootCapacity << "\n";
     result << motorbike.mileage << "\n";
     return result;
 }
@@ -66,7 +66,11 @@ std::ifstream &operator>>(std::ifstream &result, Motorbike &motorbike) {
     result >> motorbike.state;
     result >> motorbike.amountOfFuel;
     result >> motorbike.fuelConsumption;
-    result >> motorbike.capacity;
+    result >> motorbike.bootCapacity;
     result >> motorbike.mileage;
     return result;
+}
+
+int Motorbike::getCapacity() {
+    return bootCapacity;
 }

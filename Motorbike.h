@@ -24,6 +24,8 @@ public:
     friend std::ostream & operator << (std ::ostream & result ,const Motorbike &motorbike);
     friend std::ofstream & operator << (std ::ofstream & result ,const Motorbike &motorbike);
     friend std::ifstream & operator >> (std::ifstream &result, Motorbike &motorbike);
+
+    int getCapacity() override;
 };
 
 

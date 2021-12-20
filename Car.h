@@ -25,12 +25,14 @@ public:
         const std::string &model,
         Color color,
         double fuelConsumption,
-        int capacity,
+        int bootCapacity,
         int amountOfFuel = 0,
         CarState state = CarState::STANDING,
         int mileage = 0);
 
     bool isInstanceOf(const CarSpecification &carSpecification);
+
+    int getCapacity() override;
 
     friend std::ostream & operator << (std ::ostream & result ,const Car &car);
     friend std::ofstream & operator << (std ::ofstream & result ,const Car &car);

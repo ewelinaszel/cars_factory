@@ -14,6 +14,7 @@ protected:
 
     int amountOfFuel;
     double fuelConsumption;
+    int bootCapacity;
     int mileage;
 
 public:
@@ -21,18 +22,18 @@ public:
                   const std::string &model,
                   Color color,
                   double fuelConsumption,
-                  int capacity,
+                  int bootCapacity,
                   CarState state,
                   int amountOfFuel,
                   int mileage);
 
     MotorVehicle();
 
-    virtual void fill(int AmountOfFuel);
+    void fill(int AmountOfFuel);
 
-    virtual void stop();
+    void stop();
 
-    virtual void drive(double distance);
+    void drive(double distance);
 
     const std::string &getBrand() const;
 
