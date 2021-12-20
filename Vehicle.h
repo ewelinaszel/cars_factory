@@ -16,13 +16,15 @@ std::istream &operator>>(std::istream &result, CarState &carState);
 
 class Vehicle {
 protected:
+    std::string brand;
+    std::string model;
     int capacity;
-    CarState state;
     Color color;
+    CarState state;
 public:
     Vehicle();
 
-    explicit Vehicle(int capacity, Color color, CarState state);
+    Vehicle(const std::string &brand, const std::string &model, int capacity, Color color, CarState state);
 
     int getCapacity() const;
 

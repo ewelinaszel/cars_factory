@@ -11,8 +11,7 @@
 class MotorVehicle: public Vehicle{
 
 protected:
-    std::string brand;
-    std::string model;
+
     int amountOfFuel;
     double fuelConsumption;
     int mileage;

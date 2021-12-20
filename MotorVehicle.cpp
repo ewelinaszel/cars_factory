@@ -45,9 +45,7 @@ MotorVehicle::MotorVehicle(const std::string &brand,
                            CarState state,
                            int amountOfFuel,
                            int mileage) :
-                                Vehicle(capacity, color, state),
-                                brand(brand),
-                                model(model),
+                                Vehicle(brand, model,capacity, color, state),
                                 fuelConsumption(fuelConsumption),
                                 amountOfFuel(amountOfFuel),
                                 mileage(mileage) {}

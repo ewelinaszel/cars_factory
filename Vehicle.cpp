@@ -31,10 +31,12 @@ int Vehicle::getCapacity() const {
     return capacity;
 }
 
-Vehicle::Vehicle(int capacity, Color color, CarState state) : capacity(capacity), color(color), state(state) {}
 
 Vehicle::Vehicle() {}
 
 CarState Vehicle::getState() const {
     return state;
 }
+
+Vehicle::Vehicle(const std::string &brand, const std::string &model, int capacity, Color color, CarState state) : brand(
+        brand), model(model), capacity(capacity), state(state), color(color) {}
