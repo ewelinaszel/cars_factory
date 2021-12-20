@@ -4,12 +4,27 @@
 
 #include "Vehicle.h"
 
-void Vehicle::drive(double distance) {
-
+std::ostream &operator<<(std::ostream &result, const CarState &carState) {
+    switch (carState) {
+        case CarState::STANDING:
+            result << "Standing";
+            break;
+        case CarState::DRIVING:
+            result << "Driving";
+            break;
+    }
+    return result;
 }
 
-void Vehicle::stop() {
-
+std::istream &operator>>(std::istream &result, CarState &carState) {
+    std::string stateString;
+    result >> stateString;
+    if (stateString == "Standing") {
+        carState = CarState::STANDING;
+    } else if (stateString == "Driving") {
+        carState = CarState::DRIVING;
+    }
+    return result;
 }
 
 int Vehicle::getCapacity() const {

@@ -7,66 +7,28 @@
 #include "CarSpecification.h"
 
 //przeładowanie operatora wypisywania na ekran dla enum carState
-std::ostream &operator<<(std::ostream &result, const CarState &carState) {
-    switch (carState) {
-        case CarState::STANDING:
-            result << "Standing";
-            break;
-        case CarState::DRIVING:
-            result << "Driving";
-            break;
-    }
-    return result;
-}
+//std::ostream &operator<<(std::ostream &result, const CarState &carState) {
+//    switch (carState) {
+//        case CarState::STANDING:
+//            result << "Standing";
+//            break;
+//        case CarState::DRIVING:
+//            result << "Driving";
+//            break;
+//    }
+//    return result;
+//}
 
-std::istream &operator>>(std::istream &result, CarState &carState) {
-    std::string stateString;
-    result >> stateString;
-    if (stateString == "Standing") {
-        carState = CarState::STANDING;
-    } else if (stateString == "Driving") {
-        carState = CarState::DRIVING;
-    }
-    return result;
-}
-
-//napełnia bak wpisaną przez użytkownika ilością paliwa
-void Car::fill(int AmountOfFuel) {
-    if (AmountOfFuel == 0) {
-        std::cout << "Brak substancji napędowej." << std::endl;
-    } else if (AmountOfFuel < 0) {
-        std::cout << "Ilosc substancji napedowej nie moze byc ujemna" << std::endl;
-    } else if (AmountOfFuel > 0) {
-        this->amountOfFuel += AmountOfFuel;
-    }
-}
-
-void Car::drive(double distance) {
-    int requiredAmountOfFuelToDrive = (this ->fuelConsumption * distance)/100;
-
-    if (this->state == CarState::DRIVING) {
-        std::cout << "Pojazd juz jest w ruchu" << std::endl;
-        return;
-    }
-
-    if (this->amountOfFuel < requiredAmountOfFuelToDrive) {
-        std::cout << "Brak wystarczajacej ilosci substancji napedowej" << std::endl;
-        return;
-    }
-    this->amountOfFuel -= requiredAmountOfFuelToDrive;
-    this->state = CarState::DRIVING;
-    this->mileage += distance;
-}
-
-void Car::stop() {
-    if (this->state == CarState::STANDING) {
-        std::cout << "Pojazd juz jest zaparkowany" << std::endl;
-        return;
-    }
-    this->state = CarState::STANDING;
-}
-
-
+//std::istream &operator>>(std::istream &result, CarState &carState) {
+//    std::string stateString;
+//    result >> stateString;
+//    if (stateString == "Standing") {
+//        carState = CarState::STANDING;
+//    } else if (stateString == "Driving") {
+//        carState = CarState::DRIVING;
+//    }
+//    return result;
+//}
 
 //sprawdzenie czy istnieje samochód o danej specyfikacji
 bool Car::isInstanceOf(const CarSpecification &carSpecification) {

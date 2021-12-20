@@ -14,7 +14,7 @@
 
 
 
-std::ostream & operator<<(std ::ostream & result ,const CarState &carState);
+//std::ostream & operator<<(std ::ostream & result ,const CarState &carState);
 
 class Car: public MotorVehicle {
 
@@ -29,12 +29,6 @@ public:
         int amountOfFuel = 0,
         CarState state = CarState::STANDING,
         int mileage = 0);
-
-    void fill(int AmountOfFuel);
-
-    void stop();
-
-    void drive(double distance);
 
     bool isInstanceOf(const CarSpecification &carSpecification);
 

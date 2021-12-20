@@ -11,6 +11,8 @@ enum class CarState {
     DRIVING,
     STANDING
 };
+std::ostream & operator<<(std ::ostream & result ,const CarState &carState);
+std::istream &operator>>(std::istream &result, CarState &carState);
 
 class Vehicle {
 protected:
@@ -22,13 +24,10 @@ public:
 
     explicit Vehicle(int capacity, Color color, CarState state);
 
-    virtual void stop();
-
-    virtual void drive(double distance);
-
     int getCapacity() const;
 
     CarState getState() const;
+
 };
 
 

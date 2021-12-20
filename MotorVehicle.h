@@ -31,6 +31,10 @@ public:
 
     virtual void fill(int AmountOfFuel);
 
+    virtual void stop();
+
+    virtual void drive(double distance);
+
     const std::string &getBrand() const;
 
     const std::string &getModel() const;
