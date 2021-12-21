@@ -29,6 +29,9 @@ public:
 
     virtual int getCapacity() = 0;
 
+    virtual void stop()=0;
+
+    virtual void drive(double distance)=0;
 };
 
 

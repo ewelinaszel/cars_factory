@@ -31,13 +31,9 @@ public:
 
     void fill(int AmountOfFuel);
 
-    void stop();
+    void stop() override;
 
-    void drive(double distance);
-
-    const std::string &getBrand() const;
-
-    const std::string &getModel() const;
+    void drive(double distance) override;
 
     int getAmountOfFuel() const;
 

@@ -15,14 +15,6 @@ void MotorVehicle::fill(int AmountOfFuel) {
     }
 }
 
-const std::string &MotorVehicle::getBrand() const {
-    return brand;
-}
-
-const std::string &MotorVehicle::getModel() const {
-    return model;
-}
-
 int MotorVehicle::getAmountOfFuel() const {
     return amountOfFuel;
 }
@@ -75,4 +67,5 @@ void MotorVehicle::drive(double distance) {
     this->state = CarState::DRIVING;
     this->mileage += distance;
 }
+
 
