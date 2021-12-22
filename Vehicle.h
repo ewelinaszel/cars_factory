@@ -21,9 +21,11 @@ protected:
     Color color;
     CarState state;
 public:
-    Vehicle();
+    explicit Vehicle();
 
-    Vehicle(const std::string &brand, const std::string &model, Color color, CarState state);
+    explicit Vehicle(const std::string &brand, const std::string &model, Color color, CarState state);
+
+    virtual ~Vehicle();
 
     CarState getState() const;
 

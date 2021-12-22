@@ -199,6 +199,9 @@ UIContext createUIContext() {
 
 int main(int argc, char* argv[]) {
 
+    Car c = Car("Elo", "elo", Color::WHITE, 12.0, 100);
+    c.drive(10);
+
     std::string* inputFileName = nullptr;
     for(int i=1; i<argc; i++) {
         if(std::string(argv[i]) == "-f" && i+1<argc) {

@@ -37,5 +37,9 @@ CarState Vehicle::getState() const {
 Vehicle::Vehicle(const std::string &brand, const std::string &model, Color color, CarState state) : brand(
         brand), model(model), state(state), color(color) {}
 
+Vehicle::~Vehicle() {
+
+}
+
 
 

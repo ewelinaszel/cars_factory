@@ -18,7 +18,7 @@ protected:
     int mileage;
 
 public:
-    MotorVehicle( const std::string &brand,
+    explicit MotorVehicle( const std::string &brand,
                   const std::string &model,
                   Color color,
                   double fuelConsumption,
@@ -27,13 +27,11 @@ public:
                   int amountOfFuel,
                   int mileage);
 
-    MotorVehicle();
+    explicit MotorVehicle();
+
+    virtual ~MotorVehicle();
 
     void fill(int AmountOfFuel);
-
-    void stop() override;
-
-    void drive(double distance) override;
 
     int getAmountOfFuel() const;
 

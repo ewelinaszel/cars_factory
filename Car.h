@@ -30,9 +30,15 @@ public:
         CarState state = CarState::STANDING,
         int mileage = 0);
 
+    ~Car();
+
     bool isInstanceOf(const CarSpecification &carSpecification);
 
     int getCapacity() override;
+
+    void stop() override;
+
+    void drive(double distance) override;
 
     friend std::ostream & operator << (std ::ostream & result ,const Car &car);
     friend std::ofstream & operator << (std ::ofstream & result ,const Car &car);

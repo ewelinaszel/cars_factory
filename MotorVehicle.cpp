@@ -43,29 +43,8 @@ MotorVehicle::MotorVehicle(const std::string &brand,
         amountOfFuel(amountOfFuel),
         mileage(mileage) {}
 
-void MotorVehicle::stop() {
-    if (this->state == CarState::STANDING) {
-        std::cout << "Pojazd juz jest zaparkowany" << std::endl;
-        return;
-    }
-    this->state = CarState::STANDING;
-}
+MotorVehicle::~MotorVehicle() {
 
-void MotorVehicle::drive(double distance) {
-    int requiredAmountOfFuelToDrive = (this ->fuelConsumption * distance)/100;
-
-    if (this->state == CarState::DRIVING) {
-        std::cout << "Pojazd juz jest w ruchu" << std::endl;
-        return;
-    }
-
-    if (this->amountOfFuel < requiredAmountOfFuelToDrive) {
-        std::cout << "Brak wystarczajacej ilosci substancji napedowej" << std::endl;
-        return;
-    }
-    this->amountOfFuel -= requiredAmountOfFuelToDrive;
-    this->state = CarState::DRIVING;
-    this->mileage += distance;
 }
 
 
