@@ -10,7 +10,7 @@
 #include "Car.h"
 
 class CarFactory {
-    std::vector <Car> inventory;
+    std::vector <Car*> inventory;
 public:
     CarFactory();
 
