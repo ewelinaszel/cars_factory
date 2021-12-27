@@ -39,6 +39,8 @@ public:
 
     int getMileage() const;
 
+    void setMileage(int mileage);
+
     void stop() override;
 
     void drive(double distance) override;

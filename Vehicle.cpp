@@ -41,5 +41,17 @@ Vehicle::~Vehicle() {
 
 }
 
+const std::string &Vehicle::getBrand() const {
+    return brand;
+}
+
+const std::string &Vehicle::getModel() const {
+    return model;
+}
+
+Color Vehicle::getColor() const {
+    return color;
+}
+
 
 

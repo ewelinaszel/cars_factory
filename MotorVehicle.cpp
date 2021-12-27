@@ -72,3 +72,7 @@ void MotorVehicle::drive(double distance) {
     this->mileage += distance;
 }
 
+void MotorVehicle::setMileage(int mileage) {
+    MotorVehicle::mileage = mileage;
+}
+
