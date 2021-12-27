@@ -3,6 +3,7 @@
 //
 
 #include "Motorbike.h"
+#include "MotorbikeSpecification.h"
 
 Motorbike::Motorbike(const std::string &brand,
                      const std::string &model,
@@ -73,4 +74,14 @@ std::ifstream &operator>>(std::ifstream &result, Motorbike &motorbike) {
 
 int Motorbike::getCapacity() {
     return bootCapacity;
+}
+
+bool Motorbike::isInstanceOf(VehicleSpecification *vehicleSpecification) {
+    MotorbikeSpecification* motorbikeSpecification = dynamic_cast<MotorbikeSpecification*>(vehicleSpecification);
+    if(motorbikeSpecification == nullptr) return false;
+    return this->brand == motorbikeSpecification->getBrand() &&
+                  this->model == motorbikeSpecification->getModel() &&
+                  this->color == motorbikeSpecification->getColor() &&
+                  this->fuelConsumption == motorbikeSpecification->getFuelConsumption() &&
+                  this->bootCapacity == motorbikeSpecification->getBootCapacity();
 }

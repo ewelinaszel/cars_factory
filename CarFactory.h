@@ -8,21 +8,12 @@
 
 #include <vector>
 #include "Car.h"
-
-class CarFactory {
-    std::vector <Car*> inventory;
+#include "VehicleFactory.h"
+class CarFactory: public VehicleFactory{
 public:
     CarFactory();
 
-    ~CarFactory();
-
-    void createCar(const CarSpecification carSpecification);
-
-    Car* leaveFactory(const CarSpecification carSpecification);
-
-    friend std::ostream &operator<<(std::ostream &result, const CarFactory &carFactory);
-    friend std::ofstream &operator<<(std::ofstream &result, const CarFactory &carFactory);
-    friend std::ifstream & operator >> (std::ifstream &result, CarFactory &carFactory);
+    void createVehicle(VehicleSpecification *vehicleSpecification) override;
 };
 
 #endif //SZELIGAEWELINA_ETAP1_CARFACTORY_H

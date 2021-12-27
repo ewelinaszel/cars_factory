@@ -7,22 +7,9 @@
 
 #include <string>
 #include <iostream>
+#include "VehicleSpecification.h"
 
-enum class Color {
-    BLACK,
-    WHITE,
-    GOLD,
-    SILVER,
-    RED
-
-};
-
-std::ostream &operator<<(std::ostream &result, const Color color);
-
-std::istream &operator>>(std::istream &result, Color &color);
-
-
-class CarSpecification {
+class CarSpecification : public VehicleSpecification {
     std::string brand;
     std::string model;
     Color color;
@@ -45,6 +32,7 @@ public:
 
     friend std::ostream &operator<<(std::ostream &result, const CarSpecification carSpecification);
 
+    std::string getDescribedObjectName() override;
 };
 
 

@@ -31,13 +31,7 @@
 //}
 
 //sprawdzenie czy istnieje samochód o danej specyfikacji
-bool Car::isInstanceOf(const CarSpecification &carSpecification) {
-    return this->brand == carSpecification.getBrand() &&
-           this->model == carSpecification.getModel() &&
-           this->color == carSpecification.getColor() &&
-           this->fuelConsumption == carSpecification.getFuelConsumption() &&
-           this->bootCapacity == carSpecification.getBootCapacity();
-}
+
 
 //przeładowanie operatora wyświetlania na ekran
 std::ostream &operator<<(std::ostream &result, const Car &car) {
@@ -109,5 +103,15 @@ int Car::getCapacity() {
 
 Car::~Car() {
 
+}
+
+bool Car::isInstanceOf(VehicleSpecification *vehicleSpecification) {
+    CarSpecification* carSpecification = dynamic_cast<CarSpecification*>(vehicleSpecification);
+    if(carSpecification == nullptr) return false;
+    return this->brand == carSpecification->getBrand() &&
+           this->model == carSpecification->getModel() &&
+           this->color == carSpecification->getColor() &&
+           this->fuelConsumption == carSpecification->getFuelConsumption() &&
+           this->bootCapacity == carSpecification->getBootCapacity();
 }
 

@@ -6,6 +6,7 @@
 #define SZELIGAEWELINA_ETAP1_MOTORBIKE_H
 
 #include "MotorVehicle.h"
+#include "MotorbikeSpecification.h"
 #include <fstream>
 #include <iostream>
 
@@ -26,6 +27,8 @@ public:
     friend std::ifstream & operator >> (std::ifstream &result, Motorbike &motorbike);
 
     int getCapacity() override;
+
+    bool isInstanceOf(VehicleSpecification *vehicleSpecification) override;
 };
 
 

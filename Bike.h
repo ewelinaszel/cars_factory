@@ -9,12 +9,18 @@
 #include "BikeBasket.h"
 
 class Bike: public Vehicle{
-    BikeBasket bikeBasket;
+    BikeBasket* bikeBasket;
 public:
-    Bike(const std::string &brand, const std::string &model, Color color, CarState state,
-         const BikeBasket &bikeBasket);
+    Bike(const std::string &brand, const std::string &model, Color color,
+         BikeBasket *bikeBasket = nullptr, CarState state = CarState::STANDING);
 
     int getCapacity() override;
+
+    void stop() override;
+
+    void drive(double distance) override;
+
+    bool isInstanceOf(VehicleSpecification *vehicleSpecification) override;
 };
 
 

@@ -32,13 +32,13 @@ public:
 
     ~Car();
 
-    bool isInstanceOf(const CarSpecification &carSpecification);
-
     int getCapacity() override;
 
     friend std::ostream & operator << (std ::ostream & result ,const Car &car);
     friend std::ofstream & operator << (std ::ofstream & result ,const Car &car);
     friend std::ifstream & operator >> (std::ifstream &result, Car &car);
+
+    bool isInstanceOf(VehicleSpecification *vehicleSpecification) override;
 };
 
 

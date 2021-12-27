@@ -13,6 +13,7 @@ class UsedMotorVehicleDealer {
     std::map<MotorVehicle*, double> availableModels;
     double margin;
     void decreaseMileage(MotorVehicle &motorVehicle);
+
 public:
     double estimatePrice(MotorVehicle& motorVehicle);
 
@@ -21,6 +22,7 @@ public:
     MotorVehicle* sellToClient(MotorVehicle *motorVehicle, double price);
 
     const std::map<MotorVehicle *, double> &getAvailableModels() const;
+
 
 
 

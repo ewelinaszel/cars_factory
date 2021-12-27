@@ -40,6 +40,8 @@ public:
     const std::string &getModel() const;
 
     Color getColor() const;
+
+    virtual bool isInstanceOf(VehicleSpecification *vehicleSpecification) = 0; //?czy const
 };
 
 
