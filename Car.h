@@ -36,10 +36,6 @@ public:
 
     int getCapacity() override;
 
-    void stop() override;
-
-    void drive(double distance) override;
-
     friend std::ostream & operator << (std ::ostream & result ,const Car &car);
     friend std::ofstream & operator << (std ::ofstream & result ,const Car &car);
     friend std::ifstream & operator >> (std::ifstream &result, Car &car);

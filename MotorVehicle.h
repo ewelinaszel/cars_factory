@@ -38,6 +38,10 @@ public:
     double getFuelConsumption() const;
 
     int getMileage() const;
+
+    void stop() override;
+
+    void drive(double distance) override;
 };
 
 
