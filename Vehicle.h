@@ -35,6 +35,8 @@ public:
 
     virtual void drive(double distance)=0;
 
+    void setColor(Color color);
+
     const std::string &getBrand() const;
 
     const std::string &getModel() const;

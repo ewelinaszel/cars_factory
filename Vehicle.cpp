@@ -53,5 +53,9 @@ Color Vehicle::getColor() const {
     return color;
 }
 
+void Vehicle::setColor(Color color) {
+    Vehicle::color = color;
+}
+
 
 
