@@ -1,7 +1,13 @@
 #include <iostream>
 #include <deque>
-#include "Car.h"
+#include "Vehicle.h"
 #include "SalesDepartment.h"
+#include "SalesDepartment.cpp"
+#include "VehicleFactory.h"
+#include "VehicleSpecification.h"
+#include "Car.h"
+#include "CarSpecification.h"
+#include "CarFactory.h"
 
 std::string LINE_PREFIX = "  ";
 
@@ -33,7 +39,7 @@ int getCommandFromConsole(std::istream* inputStream) {
 }
 
 struct UIContext {
-    SalesDepartment salesDepartment;
+    SalesDepartment<Car, CarSpecification> salesDepartment;
     Car* currentCar;
 };
 
@@ -46,7 +52,7 @@ bool checkIfCurrentCarNullptr(UIContext &uiContext) {
 }
 
 void showCarList(UIContext &uiContext) {
-    std::vector<CarSpecification> availableCarSpecifications = uiContext.salesDepartment.getListOfAvailableModelsOfCars();
+    std::vector<CarSpecification> availableCarSpecifications = uiContext.salesDepartment.getListOfAvailableModels();
     int i = 0;
     for (std::vector<CarSpecification>::iterator it = availableCarSpecifications.begin();
         it != availableCarSpecifications.end(); ++it) {
@@ -60,11 +66,11 @@ void produceCar(UIContext &uiContext, std::istream* inputStream) {
     *inputStream >> i;
 
     try {
-        CarSpecification chosenCarSpecification = uiContext.salesDepartment.getListOfAvailableModelsOfCars().at(i-1);
+        CarSpecification chosenCarSpecification = uiContext.salesDepartment.getListOfAvailableModels().at(i - 1);
         uiContext.salesDepartment.orderCar(chosenCarSpecification);
     }
     catch (const std::out_of_range& oor) {
-        int n = uiContext.salesDepartment.getListOfAvailableModelsOfCars().size();
+        int n = uiContext.salesDepartment.getListOfAvailableModels().size();
         std::cout << LINE_PREFIX <<"Niepoprawny numer specyfikacji " << i << ". Index powinien mieścić się w zakresie [1, " << n << "]" << std::endl;
     }
 }
@@ -75,17 +81,17 @@ void buyCar(UIContext &uiContext, std::istream* inputStream) {
     *inputStream >> i;
 
     try {
-        CarSpecification chosenCarSpecification = uiContext.salesDepartment.getListOfAvailableModelsOfCars().at(i-1);
+        CarSpecification chosenCarSpecification = uiContext.salesDepartment.getListOfAvailableModels().at(i - 1);
         uiContext.currentCar = uiContext.salesDepartment.sellCar(chosenCarSpecification);
     }
     catch (const std::out_of_range& oor) {
-        int n = uiContext.salesDepartment.getListOfAvailableModelsOfCars().size();
+        int n = uiContext.salesDepartment.getListOfAvailableModels().size();
         std::cout << LINE_PREFIX <<"Niepoprawny numer specyfikacji " << i << ". Index powinien mieścić się w zakresie [1, " << n << "]" << std::endl;
     }
 }
 
 void showInventory(UIContext &uiContext) {
-    std::cout << uiContext.salesDepartment.getCarFactory();
+    std::cout << *uiContext.salesDepartment.getVehicleFactory();
 }
 
 void showMyCar(UIContext &uiContext){
@@ -122,7 +128,7 @@ void saveMyFactoryToFile(UIContext &uiContext, std::istream* inputStream){
     std::ofstream file;
     file.open (fileName, std::ofstream::out);
 
-    file << uiContext.salesDepartment.getCarFactory();
+    file << *uiContext.salesDepartment.getVehicleFactory();
     file.close();
     std::cout << "Zapis zakończony powodzeniem" << std::endl;
 }
@@ -157,7 +163,7 @@ void readMyFactoryFromFile(UIContext &uiContext, std::istream* inputStream){
     file >> *carFactoryFromFile;
     file.close();
 
-    uiContext.salesDepartment.setCarFactory(*carFactoryFromFile);
+    uiContext.salesDepartment.setVehicleFactory(carFactoryFromFile);
 }
 
 void readMyCarFromFile(UIContext &uiContext, std::istream* inputStream){
@@ -186,8 +192,8 @@ UIContext createUIContext() {
     CarSpecification* specification4 = new CarSpecification{"Chevrolet", "Captiva", Color::GOLD, 12.0, 360};
 
     CarFactory* carFactory = new CarFactory{};
-    SalesDepartment* salesDepartment = new SalesDepartment{
-            std::vector<CarSpecification>{*specification1, *specification2, *specification3, *specification4}, *carFactory};
+    SalesDepartment<Car, CarSpecification>* salesDepartment = new SalesDepartment<Car, CarSpecification>{
+            std::vector<CarSpecification>{*specification1, *specification2, *specification3, *specification4}, carFactory};
 
     Car *currentCar = nullptr;
 

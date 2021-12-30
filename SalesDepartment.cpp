@@ -5,36 +5,44 @@
 #include "SalesDepartment.h"
 #include "CarFactory.h"
 
-SalesDepartment::SalesDepartment() {}
+template <class T, class S>
+SalesDepartment<T, S>::SalesDepartment() {}
 
-SalesDepartment::SalesDepartment(const std::vector<CarSpecification> &listOfAvailableModelsOfCars,
-                                 const CarFactory &carFactory) : listOfAvailableModelsOfCars(
-        listOfAvailableModelsOfCars), carFactory(carFactory) {}
+template <class T, class S>
+SalesDepartment<T, S>::SalesDepartment(const std::vector<S> &listOfAvailableModels,
+                                    VehicleFactory *vehicleFactory):listOfAvailableModels(listOfAvailableModels),
+                                                                    vehicleFactory(vehicleFactory) {}
 
 
-void SalesDepartment::orderCar(CarSpecification carSpecification) {
-     this -> carFactory.createCar(carSpecification);
+template <class T, class S>
+void SalesDepartment<T, S>::orderCar(S vehicleSpecification) {
+     this -> vehicleFactory -> createVehicle(&vehicleSpecification);
 }
 
-const std::vector<CarSpecification> &SalesDepartment::getListOfAvailableModelsOfCars() const {
-    return listOfAvailableModelsOfCars;
+template <class T, class S>
+const std::vector<S> &SalesDepartment<T, S>::getListOfAvailableModels() const {
+    return listOfAvailableModels;
 }
 
-Car* SalesDepartment::sellCar(CarSpecification carSpecification) {
-    Car* car = this->carFactory.leaveFactory(carSpecification);
-    if (car == nullptr) {
-        this->carFactory.createCar(carSpecification);
-        car = this->carFactory.leaveFactory(carSpecification);
+template <class T, class S>
+T* SalesDepartment<T, S>::sellCar(S vehicleSpecification) {
+    Vehicle* vehicle = this -> vehicleFactory -> leaveFactory(&vehicleSpecification);
+    if (vehicle == nullptr) {
+        this->vehicleFactory -> createVehicle(&vehicleSpecification);
+        vehicle = this->vehicleFactory -> leaveFactory(&vehicleSpecification);
     }
-    return car;
+    T* result = dynamic_cast<T*>(vehicle);
+    return result;
 }
 
-const CarFactory &SalesDepartment::getCarFactory() const {
-    return carFactory;
+template <class T, class S>
+VehicleFactory *SalesDepartment<T, S>::getVehicleFactory() const {
+    return vehicleFactory;
 }
 
-void SalesDepartment::setCarFactory(const CarFactory &carFactory) {
-    SalesDepartment::carFactory = carFactory;
+template<class T, class S>
+void SalesDepartment<T, S>::setVehicleFactory(VehicleFactory *vehicleFactory) {
+    SalesDepartment::vehicleFactory = vehicleFactory;
 }
 
 

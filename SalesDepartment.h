@@ -5,29 +5,28 @@
 #ifndef SZELIGAEWELINA_ETAP1_SALESDEPARTMENT_H
 #define SZELIGAEWELINA_ETAP1_SALESDEPARTMENT_H
 
-
-#include "CarSpecification.h"
-#include "Car.h"
-#include "CarFactory.h"
+#include "VehicleFactory.h"
 #include <vector>
 
+template <class T, class S>
 class SalesDepartment {
-    std::vector <CarSpecification> listOfAvailableModelsOfCars;
-    CarFactory carFactory;
+    std::vector <S> listOfAvailableModels;
+    VehicleFactory* vehicleFactory;
 public:
-    SalesDepartment(const std::vector<CarSpecification> &listOfAvailableModelsOfCars, const CarFactory &carFactory);
 
     SalesDepartment();
 
-    const std::vector<CarSpecification> &getListOfAvailableModelsOfCars() const;
+    SalesDepartment(const std::vector<S> &listOfAvailableModels, VehicleFactory *vehicleFactory);
 
-    void orderCar(CarSpecification carSpecification);
+    const std::vector<S> &getListOfAvailableModels() const;
 
-    Car* sellCar(CarSpecification carSpecification);
+    void orderCar(S vehicleSpecification);
 
-    const CarFactory &getCarFactory() const;
+    T* sellCar(S vehicleSpecification);
 
-    void setCarFactory(const CarFactory &carFactory);
+    VehicleFactory *getVehicleFactory() const;
+
+    void setVehicleFactory(VehicleFactory *vehicleFactory);
 };
 
 
