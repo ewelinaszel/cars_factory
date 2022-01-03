@@ -46,32 +46,8 @@ void Motorbike::print(std::ostream &result) const{
     result << this -> mileage;
     result << "\nAktaulna ilość paliwa wynosi:";
     result << this -> amountOfFuel;
-
+    result << "\n";
 }
-//
-//std::ofstream &operator<<(std::ofstream &result, const Motorbike &motorbike) {
-//    result << motorbike.brand << "\n";
-//    result << motorbike.model << "\n";
-//    result << motorbike.color << "\n";
-//    result << motorbike.state << "\n";
-//    result << motorbike.amountOfFuel << "\n";
-//    result << motorbike.fuelConsumption << "\n";
-//    result << motorbike.bootCapacity << "\n";
-//    result << motorbike.mileage << "\n";
-//    return result;
-//}
-//
-//std::ifstream &operator>>(std::ifstream &result, Motorbike &motorbike) {
-//    result >> motorbike.brand;
-//    result >> motorbike.model;
-//    result >> motorbike.color;
-//    result >> motorbike.state;
-//    result >> motorbike.amountOfFuel;
-//    result >> motorbike.fuelConsumption;
-//    result >> motorbike.bootCapacity;
-//    result >> motorbike.mileage;
-//    return result;
-//}
 
 int Motorbike::getCapacity() const {
     return bootCapacity;

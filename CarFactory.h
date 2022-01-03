@@ -10,6 +10,10 @@
 #include "Car.h"
 #include "VehicleFactory.h"
 class CarFactory: public VehicleFactory{
+protected:
+    Vehicle* createDummyVehicle() override { return new Car(); };
+    std::string getType() const override { return "Fabryka samochodów"; };
+
 public:
     CarFactory();
 

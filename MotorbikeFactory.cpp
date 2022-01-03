@@ -9,13 +9,13 @@
 void MotorbikeFactory::createVehicle(VehicleSpecification *vehicleSpecification) {
 
     if(vehicleSpecification == nullptr) {
-        std:: cout << "Vehicle specification cannot be nullptr" << std::endl;
+        throw std::invalid_argument("Vehicle specification cannot be nullptr");
     }
 
     MotorbikeSpecification* motorbikeSpecification = dynamic_cast<MotorbikeSpecification*>(vehicleSpecification);
 
     if(motorbikeSpecification == nullptr) {
-        std::cout << "Cannot create car with given specification" << std::endl;
+        throw std::invalid_argument("Cannot create motorbike with given specification");
     }
 
     Motorbike* newMotorbike = new Motorbike(

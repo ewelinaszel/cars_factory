@@ -7,9 +7,9 @@
 
 void MotorVehicle::fill(int AmountOfFuel) {
     if (AmountOfFuel == 0) {
-        std::cout << "Brak substancji napędowej." << std::endl;
+        throw std::invalid_argument("Brak substancji napędowej.");
     } else if (AmountOfFuel < 0) {
-        std::cout << "Ilosc substancji napedowej nie moze byc ujemna" << std::endl;
+        throw std::invalid_argument("Ilość substancji napedowej nie może byc ujemna");
     } else if (AmountOfFuel > 0) {
         this->amountOfFuel += AmountOfFuel;
     }
@@ -49,8 +49,7 @@ MotorVehicle::~MotorVehicle() {
 
 void MotorVehicle::stop() {
     if (this->state == CarState::STANDING) {
-        std::cout << "Pojazd juz jest zaparkowany" << std::endl;
-        return;
+        throw std::runtime_error("Pojazd już jest zaparkowany");
     }
     this->state = CarState::STANDING;
 }
@@ -59,13 +58,11 @@ void MotorVehicle::drive(double distance) {
     int requiredAmountOfFuelToDrive = (this ->fuelConsumption * distance)/100;
 
     if (this->state == CarState::DRIVING) {
-        std::cout << "Pojazd juz jest w ruchu" << std::endl;
-        return;
+        throw std::runtime_error("Pojazd już jest w ruchu");
     }
 
     if (this->amountOfFuel < requiredAmountOfFuelToDrive) {
-        std::cout << "Brak wystarczajacej ilosci substancji napedowej" << std::endl;
-        return;
+        throw std::runtime_error("Brak wystarczajacej ilosci substancji napedowej");
     }
     this->amountOfFuel -= requiredAmountOfFuelToDrive;
     this->state = CarState::DRIVING;

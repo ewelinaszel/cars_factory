@@ -7,9 +7,12 @@
 
 
 #include "VehicleFactory.h"
+#include "Bike.h"
 
 class BikeFactory : public VehicleFactory{
-
+protected:
+    Vehicle* createDummyVehicle() override { return new Bike(); };
+    std::string getType() const override { return "Fabryka rowerów"; };
 public:
     BikeFactory();
 

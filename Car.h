@@ -35,11 +35,12 @@ public:
     int getCapacity() const override;
 
     void print(std ::ostream & result) const override;
+
     std::string shortString() const override;
+
     void writeToFile(std::ofstream &result) const override;
+
     void readFromFile(std::ifstream &result) override;
-//    friend std::ofstream & operator << (std ::ofstream & result ,const Car &car);
-//    friend std::ifstream & operator >> (std::ifstream &result, Car &car);
 
     bool isInstanceOf(VehicleSpecification *vehicleSpecification) override;
 

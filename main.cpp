@@ -8,6 +8,8 @@
 #include "Sprayer.h"
 #include "BikeFactory.h"
 #include "Motorbike.h"
+#include "MotorbikeFactory.h"
+#include "BikeSpecification.h"
 
 std::string LINE_PREFIX = "  ";
 
@@ -19,7 +21,6 @@ std::string LINE_PREFIX = "  ";
 struct UIContext {
     std::vector<SalesDepartment *> salesDepartments;
     std::vector<UsedMotorVehicleDealer *> usedMotorVehicleDealers;
-    Sprayer *sprayer;
 
     MotorVehicle *currentMotorVehicle;
     Bike *currentBike;
@@ -35,20 +36,31 @@ UIContext createUIContext() {
     CarSpecification *specification2 = new CarSpecification{"Mercedes-Benz", "E-klasa", Color::WHITE, 12.5, 160};
     CarSpecification *specification3 = new CarSpecification{"Audi", "A4", Color::SILVER, 9.0, 155};
     CarSpecification *specification4 = new CarSpecification{"Chevrolet", "Captiva", Color::GOLD, 12.0, 360};
+    MotorbikeSpecification *motorbikeSpecification1 = new MotorbikeSpecification{"Harley", "Davidson", Color::BLACK,
+                                                                                 7.2, 2};
+    MotorbikeSpecification *motorbikeSpecification2 = new MotorbikeSpecification{"Yamaha", "R1", Color::SILVER, 6.5, 1};
+    MotorbikeSpecification *motorbikeSpecification3 = new MotorbikeSpecification{"BMW", "RT", Color::RED, 5.8, 3};
+    BikeSpecification *bikeSpecification1 = new BikeSpecification{"Romet", "Orkan", Color::SILVER, 3};
+    BikeSpecification *bikeSpecification2 = new BikeSpecification{"Cross", "Hexagon", Color::WHITE, 0};
 
-    CarFactory *carFactory = new CarFactory{};
     SalesDepartment *salesDepartment1 = new SalesDepartment{
-            "Szeliga Motors Dealer",
+            "Salon samochodowy -  Szeliga Motors Dealer",
             std::vector<VehicleSpecification *>{specification1, specification2, specification3, specification4},
-            carFactory};
+            new CarFactory{}};
     SalesDepartment *salesDepartment2 = new SalesDepartment{
-            "Gładysz Zglobice",
+            "Salon samochodowy - Gładysz Tarnów",
             std::vector<VehicleSpecification *>{specification1, specification2, specification3, specification4},
-            carFactory};
+            new CarFactory{}};
     SalesDepartment *salesDepartment3 = new SalesDepartment{
-            "Mountain Bike Dealer",
-            std::vector<VehicleSpecification *>{},
+            "Salon rowerowy - MyBike Dealer",
+            std::vector<VehicleSpecification *>{bikeSpecification1, bikeSpecification2},
             new BikeFactory{}};
+    SalesDepartment *salesDepartment4 = new SalesDepartment{
+            "Salon motocyklowy - MotoLand",
+            std::vector<VehicleSpecification *>{motorbikeSpecification1, motorbikeSpecification2,
+                                                motorbikeSpecification3},
+            new MotorbikeFactory{}};
+
 
     UsedMotorVehicleDealer *usedMotorVehicleDealer1 = new UsedMotorVehicleDealer("KomisKowalski",
                                                                                  std::map<MotorVehicle *, double>(),
@@ -57,9 +69,10 @@ UIContext createUIContext() {
     uiContext.salesDepartments.push_back(salesDepartment1);
     uiContext.salesDepartments.push_back(salesDepartment2);
     uiContext.salesDepartments.push_back(salesDepartment3);
+    uiContext.salesDepartments.push_back(salesDepartment4);
     uiContext.usedMotorVehicleDealers.push_back(usedMotorVehicleDealer1);
     uiContext.currentMotorVehicle = nullptr;
-    uiContext.currentBike = new Bike("Romet", "3M", Color::WHITE);
+    uiContext.currentBike = nullptr;
     return uiContext;
 }
 
@@ -118,8 +131,9 @@ void buyVehicle(UIContext &uiContext, std::istream *inputStream) {
     *inputStream >> i;
 
     try {
-        VehicleSpecification *chosenVehicleSpecification = uiContext.currentSalesDepartment->getListOfAvailableModels().at(i - 1);
-        Vehicle* producedVehicle = uiContext.currentSalesDepartment->sellVehicle(chosenVehicleSpecification);
+        VehicleSpecification *chosenVehicleSpecification = uiContext.currentSalesDepartment->getListOfAvailableModels().at(
+                i - 1);
+        Vehicle *producedVehicle = uiContext.currentSalesDepartment->sellVehicle(chosenVehicleSpecification);
         //na pewno wyprodukowany pojazd jest Rowerem albo Pojazdem silnikowym - jedna z konwersji zwróci nullptr
         uiContext.currentMotorVehicle = dynamic_cast<MotorVehicle *>(producedVehicle);
         uiContext.currentBike = dynamic_cast<Bike *>(producedVehicle);
@@ -131,11 +145,6 @@ void buyVehicle(UIContext &uiContext, std::istream *inputStream) {
     }
 }
 
-//todo nie działa poprawnie, potrzebna implementacja
-void showInventory(SalesDepartment *salesDepartment) {
-    std::cout << salesDepartment->getVehicleFactory();
-}
-
 void startMyVehicle(Vehicle *vehicle, std::istream *inputStream) {
     double distance;
     std::cout << "Podaj ilość kilometrów do przejechania: " << std::endl;
@@ -143,14 +152,24 @@ void startMyVehicle(Vehicle *vehicle, std::istream *inputStream) {
     if (vehicle == nullptr) {
         std::cout << "Nie posiadasz aktualnie pojazdu" << std::endl;
     }
-    vehicle->drive(distance);
+    try {
+        vehicle->drive(distance);
+    }
+    catch (std::runtime_error &re) {
+        std::cout << re.what() << std::endl;
+    }
 }
 
 void stopMyVehicle(Vehicle *vehicle) {
     if (vehicle == nullptr) {
         std::cout << "Nie posiadasz aktualnie pojazdu" << std::endl;
     }
-    vehicle->stop();
+    try {
+        vehicle->stop();
+    }
+    catch (std::runtime_error &re) {
+        std::cout << re.what() << std::endl;
+    }
 }
 
 void fillMyMotorVehicle(MotorVehicle *motorVehicle, std::istream *inputStream) {
@@ -160,59 +179,75 @@ void fillMyMotorVehicle(MotorVehicle *motorVehicle, std::istream *inputStream) {
     int amountOfFuel;
     std::cout << "Podaj ilość substancji napędowej:" << std::endl;
     *inputStream >> amountOfFuel;
-    motorVehicle->fill(amountOfFuel);
+    try {
+        motorVehicle->fill(amountOfFuel);
+    }
+    catch (std::invalid_argument &e) {
+        std::cout << e.what() << std::endl;
+    }
 }
 
-//todo
-//void saveMyFactoryToFile(UIContext &uiContext, std::istream *inputStream) {
-//    std::string fileName;
-//    std::cout << "Podaj nazwę pliku" << std::endl;
-//    *inputStream >> fileName;
-//
-//    std::ofstream file;
-//    file.open(fileName, std::ofstream::out);
-//
-//    file << *uiContext.currentSalesDepartment->getVehicleFactory();
-//    file.close();
-//    std::cout << "Zapis zakończony powodzeniem" << std::endl;
-//}
-
-//todo
-void saveMyVehicleToFile(Vehicle* vehicle, std:: istream* inputStream) {
-    if(vehicle == nullptr){ return; }//dopisac
+void saveMyVehicleToFile(Vehicle *vehicle, std::istream *inputStream) {
+    if (vehicle == nullptr) { return; }//dopisac
 
     std::string fileName;
     std::cout << "Podaj nazwę pliku" << std::endl;
     *inputStream >> fileName;
 
     std::ofstream file;
-    file.open (fileName, std::ofstream::out);
+    file.open(fileName, std::ofstream::out);
     file << *vehicle;
     file.close();
 }
 
-//todo przeczytac pierwsza linie , if i wtedy konkretny obiekt klasy podrzednej Car* car = new Car()
-//void readMyFactoryFromFile(UIContext &uiContext, std::istream *inputStream) {
-//    std::string fileName;
-//    std::cout << "Podaj nazwę pliku" << std::endl;
-//    *inputStream >> fileName;
-//
-//    std::ifstream file;
-//    file.open(fileName, std::ofstream::in);
-//
-//    if (!file) {
-//        std::cout << "Plik nie istnieje. Nie można wczytać fabryki." << std::endl;
-//        return;
-//    }
-//
-//    CarFactory *carFactoryFromFile = new CarFactory();
-//    file >> *carFactoryFromFile;
-//    file.close();
-//
-//    uiContext.currentSalesDepartment->setVehicleFactory(carFactoryFromFile);
-//}
+void showInventory(SalesDepartment *salesDepartment) {
+    std::cout << *salesDepartment->getVehicleFactory();
+}
 
-//todo
+void saveFactoryToFile(VehicleFactory *vehicleFactory, std::istream *inputStream) {
+    std::string fileName;
+    std::cout << "Podaj nazwę pliku" << std::endl;
+    *inputStream >> fileName;
+
+    std::ofstream file;
+    file.open(fileName, std::ofstream::out);
+    file << *vehicleFactory;
+    file.close();
+}
+
+void readFactoryFromFile(SalesDepartment *salesDepartment, std::istream *inputStream) {
+    std::string fileName;
+    std::cout << "Podaj nazwę pliku" << std::endl;
+    *inputStream >> fileName;
+
+    std::ifstream file;
+    file.open(fileName, std::ofstream::in);
+
+    if (!file) {
+        std::cout << "Plik nie istnieje. Nie można wczytać fabryki." << std::endl;
+        return;
+    }
+
+    VehicleFactory *vehicleFactoryFromFile;
+    std::string readLine;
+    getline(file, readLine);
+    if (readLine == "Fabryka samochodów:") {
+        vehicleFactoryFromFile = new CarFactory();
+    } else if (readLine == "Fabryka motorów:") {
+        vehicleFactoryFromFile = new MotorbikeFactory();
+    } else if (readLine == "Fabryka rowerów:") {
+        vehicleFactoryFromFile = new BikeFactory();
+    } else {
+        std::cout << "Nieznany rodzaj fabryki" << std::endl;
+        return;
+    }
+
+    file >> *vehicleFactoryFromFile;
+    file.close();
+
+    salesDepartment->setVehicleFactory(vehicleFactoryFromFile);
+}
+
 void readMyCarFromFile(UIContext &uiContext, std::istream *inputStream) {
     std::string fileName;
     std::cout << "Podaj nazwę pliku" << std::endl;
@@ -225,35 +260,28 @@ void readMyCarFromFile(UIContext &uiContext, std::istream *inputStream) {
         std::cout << "Plik nie istnieje. Nie można wczytać samochodu." << std::endl;
         return;
     }
-    std:: string readLine;
-    getline(file,readLine);
-    if(readLine == "Samochód:"){
-        Car* carFromFile = new Car();
+    std::string readLine;
+    getline(file, readLine);
+    if (readLine == "Samochód:") {
+        Car *carFromFile = new Car();
         file >> *carFromFile;
         file.close();
         uiContext.currentMotorVehicle = carFromFile;
-    }
-    else if(readLine == "Motor:"){
-        Motorbike* motorbikeFromFile =  new Motorbike();
+    } else if (readLine == "Motor:") {
+        Motorbike *motorbikeFromFile = new Motorbike();
         file >> *motorbikeFromFile;
         file.close();
-       uiContext.currentMotorVehicle = motorbikeFromFile;
-    }
-    else if(readLine == "Rower:"){
-        Bike* bikeFromFile =  new Bike();
+        uiContext.currentMotorVehicle = motorbikeFromFile;
+    } else if (readLine == "Rower:") {
+        Bike *bikeFromFile = new Bike();
         file >> *bikeFromFile;
         file.close();
         uiContext.currentBike = bikeFromFile;
-    }
-    else{
-        std::cout << "Nie mozna odczytac z pliku"<<std::endl;
+    } else {
+        std::cout << "Nie mozna odczytac z pliku" << std::endl;
     }
 
     file.close();
-//    Car *carFromFile = new Car();
-//    file >> *carFromFile;
-//    file.close();
-//    uiContext.currentMotorVehicle = carFromFile;
 }
 
 void estimatePriceOfMyVehicle(UIContext &uiContext, std::istream *inputStream) {
@@ -296,8 +324,15 @@ void buyCarFromDealer(UIContext &uiContext, std::istream *inputStream) {
     std::map<MotorVehicle *, double>::const_iterator it = uiContext.currentMotorVehiclesDealer->getAvailableModels().begin();
     std::advance(it, chosenIndex - 1);
     MotorVehicle *motorVehicle = it->first;
-    uiContext.currentMotorVehicle = uiContext.currentMotorVehiclesDealer->sellToClient(motorVehicle, cost);
-
+    try {
+        uiContext.currentMotorVehicle = uiContext.currentMotorVehiclesDealer->sellToClient(motorVehicle, cost);
+    }
+    catch (std::runtime_error &e) {
+        std::cout << e.what();
+    }
+    catch (std::invalid_argument &e) {
+        std::cout << e.what() << " Sprzedaż zakończona niepowodzeniem" << std::endl;
+    }
 }
 
 
@@ -315,10 +350,55 @@ void changeColorOfVehicle(UIContext &uiContext, std::istream *inputStream) {
     if (chosenNumber >= 0 && chosenNumber < 4) {
         Color chosenColor = static_cast<Color>(chosenNumber);
         if (checkIfCurrentMotorVehicleNullptr(uiContext)) { return; }
-        uiContext.currentMotorVehicle->setColor(chosenColor);
+        Sprayer::getInstance()->changeColor(*uiContext.currentMotorVehicle, chosenColor);
     } else {
         std::cout << "Liczba z poza zakresu 0 do 4" << std::endl;
     }
+
+}
+
+void createNewSalesDepartment(UIContext &uiContext, std::istream *inputStream) {
+    CarSpecification *specification1 = new CarSpecification{"BMW", "Seria-3", Color::BLACK, 12.0, 150};
+    CarSpecification *specification2 = new CarSpecification{"Mercedes-Benz", "E-klasa", Color::WHITE, 12.5, 160};
+    MotorbikeSpecification *motorbikeSpecification2 = new MotorbikeSpecification{"Yamaha", "R1", Color::SILVER, 6.5, 1};
+    MotorbikeSpecification *motorbikeSpecification3 = new MotorbikeSpecification{"BMW", "RT", Color::RED, 5.8, 3};
+    BikeSpecification *bikeSpecification1 = new BikeSpecification{"Romet", "Orkan", Color::SILVER, 3};
+    BikeSpecification *bikeSpecification2 = new BikeSpecification{"Cross", "Hexagon", Color::WHITE, 0};
+
+    std::string salesDepartmentName;
+    std::cout << "Podaj nazwę salonu:";
+    *inputStream >> salesDepartmentName; //todo wpisywanie ze spacją
+    std::cout << "Wybierz jaki typ pojazdów będzie dostępny w Twoim salonie:" << std::endl;
+    std::cout << "[0] Samochody" << std::endl;
+    std::cout << "[1] Motocykle" << std::endl;
+    std::cout << "[2] Rowery" << std::endl;
+    int commandNumber = getCommandFromConsole(inputStream);
+    SalesDepartment *salesDepartmentFromUser;
+    switch (commandNumber) {
+        case 0:
+            salesDepartmentFromUser = new SalesDepartment{salesDepartmentName,
+                                                          std::vector<VehicleSpecification *>{specification1,
+                                                                                              specification2},
+                                                          new CarFactory{}};
+
+            break;
+        case 1:
+            salesDepartmentFromUser = new SalesDepartment{salesDepartmentName,
+                                                          std::vector<VehicleSpecification *>{motorbikeSpecification3,
+                                                                                              motorbikeSpecification2},
+                                                          new MotorbikeFactory{}};
+            break;
+        case 2:
+            salesDepartmentFromUser = new SalesDepartment{salesDepartmentName,
+                                                          std::vector<VehicleSpecification *>{bikeSpecification1,
+                                                                                              bikeSpecification2},
+                                                          new BikeFactory{}};
+            break;
+        default:
+            std::cout << "Niepoprawny numer.";
+            return;
+    }
+    uiContext.salesDepartments.push_back(salesDepartmentFromUser);
 
 }
 
@@ -339,9 +419,9 @@ void showSalesDepartmentMenu() {
     std::cout << std::endl;
     std::cout << "Wybierz interesującą Cię opcje:" << std::endl;
     std::cout << "[0] Wyjdź" << std::endl;
-    std::cout << "[1] Wypisz listę modeli samochodów" << std::endl;
-    std::cout << "[2] Wybierz samochód, który chcesz aby wyprodukowano" << std::endl;
-    std::cout << "[3] Kup samochód" << std::endl;
+    std::cout << "[1] Wypisz listę modeli pojazdów" << std::endl;
+    std::cout << "[2] Wybierz pojazd, który chcesz aby wyprodukowano" << std::endl;
+    std::cout << "[3] Kup pojazd" << std::endl;
     std::cout << "[4] Wypisz stan fabryki" << std::endl;
     std::cout << "[5] Zapisz fabrykę do pliku" << std::endl;
     std::cout << "[6] Wczytaj fabrykę z pliku" << std::endl;
@@ -396,9 +476,8 @@ void showAdministrationMenu() {
     std::cout << "[2] Zapisz mój rower do pliku" << std::endl;
     std::cout << "[3] Wczytaj mój pojazd silnikowy z pliku" << std::endl;
     std::cout << "[4] Wczytaj mój rower z pliku" << std::endl;
-    std::cout << "[5] Stworzyć nowy salon" << std::endl;
-    std::cout << "[6] Stworzyć nowy komis" << std::endl;
-    std::cout << "[7] Wczytać całą konfiguracje z pliku :D (to byłoby ciekawe)" << std::endl;
+    std::cout << "[5] Stworzyć nowy salon" << std::endl; //todo
+    std::cout << "[6] Stworzyć nowy komis" << std::endl; //todo
     std::cout << std::endl;
 }
 
@@ -428,19 +507,11 @@ void enterSalesDepartmentMenu(UIContext &uiContext, std::istream *inputStream) {
                 showInventory(uiContext.currentSalesDepartment);
                 break;
             case 5:
-//                todo
+                saveFactoryToFile(uiContext.currentSalesDepartment->getVehicleFactory(), inputStream);
                 break;
             case 6:
-//                todo
+                readFactoryFromFile(uiContext.currentSalesDepartment, inputStream);
                 break;
-//                std::cout << "Wybierz interesującą Cię opcje:" << std::endl;
-//                std::cout << "[0] Wyjdź" << std::endl;
-//                std::cout << "[1] Wypisz listę modeli samochodów" << std::endl;
-//                std::cout << "[2] Wybierz samochód, który chcesz aby wyprodukowano" << std::endl;
-//                std::cout << "[3] Kup samochód" << std::endl;
-//                std::cout << "[4] Wypisz stan fabryki" << std::endl;
-//                std::cout << "[5] Zapisz fabrykę do pliku" << std::endl;
-//                std::cout << "[6] Wczytaj fabrykę z pliku" << std::endl;
             default:
                 std::cout << "Opcja o podanym numerze nie istnieje" << std::endl;
         }
@@ -474,7 +545,6 @@ void enterUsedMotorVehicleDealerMenu(UIContext &uiContext, std::istream *inputSt
     }
 }
 
-//menu Lakiernika
 void enterSprayerMenu(UIContext &uiContext, std::istream *inputStream) {
     showSprayerMenu();
     bool running = true;
@@ -566,10 +636,9 @@ void enterAdministrationMenu(UIContext &uiContext, std::istream *inputStream) {
                 readMyCarFromFile(uiContext, inputStream);
                 break;
             case 5:
-
+                createNewSalesDepartment(uiContext, inputStream);
                 break;
             case 6:
-
                 break;
             case 7:
 
@@ -600,7 +669,7 @@ void enterSpecificPlace(UIContext &uiContext, std::istream *inputStream) {
         std::cout << "[" << i << "] " << vd->getName() << std::endl;
         i++;
     }
-    std::cout << "[" << i << "] " << "Lakienik" << std::endl;
+    std::cout << "[" << i << "] " << "Lakiernik" << std::endl;
     i++;
 
     if (uiContext.currentMotorVehicle != nullptr) {
@@ -706,3 +775,9 @@ int main(int argc, char *argv[]) {
     // todo posprzątać po sobie?
     return 0;
 }
+
+//todo opcje w admin menu do tworzenia salonów i komisów
+//todo rozrzerzyć UIContext o predefiniowane listy modeli ora przykładowe salony (Rowerów, Motorów) DONE
+//todo obsługa sytuacji wyjątkowych (wyjątki) DONE
+//todo template w UsedMotorVehicleDealer
+//todo zeby paliwa nie była nieskończona ilość

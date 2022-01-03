@@ -23,10 +23,16 @@ bool Bike::isInstanceOf(VehicleSpecification *vehicleSpecification) {
 }
 
 void Bike::stop() {
+    if (this->state == CarState::STANDING) {
+        throw std::runtime_error("Rower już stoi w miejscu.");
+    }
     this->state = CarState::STANDING;
 }
 
 void Bike::drive(double distance) {
+    if (this->state == CarState::DRIVING) {
+        throw std::runtime_error("Rower jest już w ruchu");
+    }
     this->state = CarState::DRIVING;
 }
 
@@ -49,7 +55,7 @@ void Bike::print(std::ostream &result) const {
         result<<"\nPojemność koszyka wynosi:";
         result<< this ->bikeBasket->getBasketCapacity();
     }
-
+    result << '\n';
 }
 
 std::string Bike::shortString() const {

@@ -6,33 +6,6 @@
 #include "Car.h"
 #include "CarSpecification.h"
 
-//przeładowanie operatora wypisywania na ekran dla enum carState
-//std::ostream &operator<<(std::ostream &result, const CarState &carState) {
-//    switch (carState) {
-//        case CarState::STANDING:
-//            result << "Standing";
-//            break;
-//        case CarState::DRIVING:
-//            result << "Driving";
-//            break;
-//    }
-//    return result;
-//}
-
-//std::istream &operator>>(std::istream &result, CarState &carState) {
-//    std::string stateString;
-//    result >> stateString;
-//    if (stateString == "Standing") {
-//        carState = CarState::STANDING;
-//    } else if (stateString == "Driving") {
-//        carState = CarState::DRIVING;
-//    }
-//    return result;
-//}
-
-//sprawdzenie czy istnieje samochód o danej specyfikacji
-
-
 //przeładowanie operatora wyświetlania na ekran
 void Car::print(std::ostream &result) const {
     result << "Marka samochodu to:";
@@ -56,20 +29,8 @@ void Car::print(std::ostream &result) const {
     result << this -> mileage;
     result << "\nAktaulna ilość paliwa wynosi:";
     result << this -> amountOfFuel;
-
+    result << '\n';
 }
-
-//std::ifstream &operator>>(std::ifstream &result, Car &car) {
-//    result >> car.brand;
-//    result >> car.model;
-//    result >> car.color;
-//    result >> car.state;
-//    result >> car.amountOfFuel;
-//    result >> car.fuelConsumption;
-//    result >> car.bootCapacity;
-//    result >> car.mileage;
-//    return result;
-//    }
 
 Car::Car() {}
 
@@ -88,7 +49,6 @@ int Car::getCapacity() const {
 }
 
 Car::~Car() {
-
 }
 
 bool Car::isInstanceOf(VehicleSpecification *vehicleSpecification) {

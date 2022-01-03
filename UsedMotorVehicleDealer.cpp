@@ -10,13 +10,12 @@ const std::map<MotorVehicle *, double> &UsedMotorVehicleDealer::getAvailableMode
 
 MotorVehicle *UsedMotorVehicleDealer::sellToClient(MotorVehicle *motorVehicle, double price) {
     if (this->availableModels.find(motorVehicle) == this->availableModels.end()){
-        std::cout<<"Brak modelu na stanie."<<std::endl;
+        throw std::runtime_error("Brak modelu na stanie");
     }
 
     double minimumSellPrice = this->availableModels[motorVehicle];
     if (price < minimumSellPrice) {
-        //wyjątek nie można sprzedać poniżej ceny sprzedarzy (za mało piniążków)
-        std::cout << "Nie sprzedamy Ci za tak mało pieniędzy, nasza cena to " << minimumSellPrice << std::endl;
+        throw std::invalid_argument("Zbyt niska kwota.");
     }
     this->availableModels.erase(motorVehicle);
     return motorVehicle;

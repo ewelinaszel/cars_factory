@@ -16,7 +16,9 @@ protected:
     ~Sprayer();
 public:
     Sprayer(Sprayer &other) = delete;
+
     void operator=(const Sprayer &) = delete;
+
     static Sprayer *getInstance();
 
     void changeColor(Vehicle &vehicle, Color color);

@@ -11,14 +11,24 @@ SalesDepartment::SalesDepartment(const std::string &name, const std::vector<Vehi
                                                                        vehicleFactory(vehicleFactory) {}
 
 void SalesDepartment::orderVehicle(VehicleSpecification* vehicleSpecification) {
-     this -> vehicleFactory -> createVehicle(vehicleSpecification);
-}
+     try {
+         this->vehicleFactory->createVehicle(vehicleSpecification);
+     }
+     catch(std::invalid_argument &e) {
+         std::cout << e.what() << std::endl;
+     }
 
+}
 
 Vehicle* SalesDepartment::sellVehicle(VehicleSpecification* vehicleSpecification) {
     Vehicle* vehicle = this -> vehicleFactory -> leaveFactory(vehicleSpecification);
     if (vehicle == nullptr) {
-        this->vehicleFactory -> createVehicle(vehicleSpecification);
+        try {
+            this->vehicleFactory->createVehicle(vehicleSpecification);
+        }
+        catch(std::invalid_argument &e) {
+            std::cout << e.what() << std::endl;
+        }
         vehicle = this->vehicleFactory -> leaveFactory(vehicleSpecification);
     }
     return vehicle;

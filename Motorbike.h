@@ -25,11 +25,12 @@ public:
               int mileage = 0);
 
     void print(std ::ostream & result) const override;
+
     std::string shortString() const override;
+
     void writeToFile(std::ofstream &result) const override;
+
     void readFromFile(std::ifstream &result) override;
-//    friend std::ofstream & operator << (std ::ofstream & result ,const Motorbike &motorbike);
-//    friend std::ifstream & operator >> (std::ifstream &result, Motorbike &motorbike);
 
     int getCapacity() const override;
 

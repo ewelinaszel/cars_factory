@@ -9,10 +9,13 @@
 #include <vector>
 #include "Vehicle.h"
 #include <iostream>
+#include <fstream>
 
 class VehicleFactory {
 protected:
     std::vector<Vehicle *> inventory;
+    virtual Vehicle* createDummyVehicle() = 0;
+    virtual std::string getType() const = 0;
 public:
 
     VehicleFactory();
