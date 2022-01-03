@@ -16,14 +16,13 @@ Color MotorbikeSpecification::getColor() const {
     return color;
 }
 
-std::ostream &operator<<(std::ostream &result, const MotorbikeSpecification motorbikeSpecification) {
-    result << motorbikeSpecification.getBrand() << ", "
-           << motorbikeSpecification.getModel() << ", "
-           << motorbikeSpecification.getColor() << ", "
-           << motorbikeSpecification.getFuelConsumption() << "l/100km, "
-           << motorbikeSpecification.getBootCapacity() << "l";
-    return result;
-}
+void MotorbikeSpecification::shortPrint(std::ostream &result) const {
+    result << this -> getBrand() << ", "
+           << this -> getModel() << ", "
+           << this -> getColor() << ", "
+           << this -> getFuelConsumption() << "l/100km, "
+           << this -> getBootCapacity() << "l";
+    }
 
 MotorbikeSpecification::MotorbikeSpecification(const std::string &brand, const std::string &model, Color color,
                                    double fuelConsumption, int bootCapacity) : brand(brand), model(model), color(color),

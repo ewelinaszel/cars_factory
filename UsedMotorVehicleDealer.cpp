@@ -49,3 +49,11 @@ double UsedMotorVehicleDealer::estimatePrice(MotorVehicle &motorVehicle) {
 void UsedMotorVehicleDealer::decreaseMileage(MotorVehicle &motorVehicle) {
     motorVehicle.setMileage(motorVehicle.getMileage()/2);
 }
+
+UsedMotorVehicleDealer::UsedMotorVehicleDealer(const std::string &name,
+                                               const std::map<MotorVehicle *, double> &availableModels, double margin)
+        : name(name), availableModels(availableModels), margin(margin) {}
+
+const std::string &UsedMotorVehicleDealer::getName() const {
+    return name;
+}

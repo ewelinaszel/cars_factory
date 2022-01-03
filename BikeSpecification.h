@@ -24,7 +24,7 @@ public:
 
     int getBasketCapacity() const;
 
-    friend std::ostream &operator<<(std::ostream &result, const BikeSpecification bikeSpecification);
+    void shortPrint(std::ostream &result) const override;
 
     std::string getDescribedObjectName() override;
 

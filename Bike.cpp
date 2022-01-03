@@ -9,7 +9,7 @@ Bike::Bike(const std::string &brand, const std::string &model, Color color, Bike
         : Vehicle(brand, model, color, state), bikeBasket(bikeBasket) {}
 
 
-int Bike::getCapacity() {
+int Bike::getCapacity() const {
     if(bikeBasket == nullptr) return 0;
     return bikeBasket->getBasketCapacity();
 }
@@ -29,4 +29,57 @@ void Bike::stop() {
 void Bike::drive(double distance) {
     this->state = CarState::DRIVING;
 }
+
+void Bike::print(std::ostream &result) const {
+    result << "Marka roweru to:";
+    result << this -> brand;
+    result << "\nKolor:";
+    result << this -> color;
+    result << "\nModel roweru:";
+    result << this -> model;
+    if (this -> state == CarState::DRIVING) {
+        result << "\nRower jest w ruchu.";
+    } else {
+        result << "\nRower stoi.";
+    }
+    if(this -> bikeBasket== nullptr){
+        result<<"\nBrak koszyka.";
+    }
+    else{
+        result<<"\nPojemność koszyka wynosi:";
+        result<< this ->bikeBasket->getBasketCapacity();
+    }
+
+}
+
+std::string Bike::shortString() const {
+    return "Rower: " + this->brand + ", " + this->model;
+}
+
+void Bike::writeToFile(std::ofstream &result) const {
+    result << "Rower:"<< "\n";
+    result << this -> brand << "\n";
+    result << this ->model << "\n";
+    result << this ->color << "\n";
+    result << this ->state << "\n";
+    result << this ->getCapacity() << "\n";
+}
+
+void Bike::readFromFile(std::ifstream &result) {
+    result >> this -> brand;
+    result >> this ->model;
+    result >> this ->color;
+    result >> this ->state;
+    int capacity;
+    result >> capacity;
+    if(capacity == 0 ){
+        this ->bikeBasket = nullptr;
+    }
+    else{
+        this ->bikeBasket = new BikeBasket(capacity);
+    }
+}
+
+Bike::Bike() {}
+
 

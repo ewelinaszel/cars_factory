@@ -34,56 +34,42 @@
 
 
 //przeładowanie operatora wyświetlania na ekran
-std::ostream &operator<<(std::ostream &result, const Car &car) {
+void Car::print(std::ostream &result) const {
     result << "Marka samochodu to:";
-    result << car.brand;
+    result << this -> brand;
     result << "\nKolor:";
-    result << car.color;
+    result << this -> color;
     result << "\nModel samochodu:";
-    result << car.model;
+    result << this -> model;
     result << "\nAktualna ilość paliwa wynosi:";
-    result << car.amountOfFuel;
-    if (car.state == CarState::DRIVING) {
+    result << this -> amountOfFuel;
+    if (this -> state == CarState::DRIVING) {
         result << "\nSamochód jest w ruchu.";
     } else {
         result << "\nSamochód stoi.";
     }
     result << "\nSpalanie samochodu wynosi: ";
-    result << car.fuelConsumption;
+    result << this -> fuelConsumption;
     result << "\nPojemność bagażnika wynosi:";
-    result << car.bootCapacity;
+    result << this -> bootCapacity;
     result << "\nPrzebieg samochodu wynosi:";
-    result << car.mileage;
+    result << this -> mileage;
     result << "\nAktaulna ilość paliwa wynosi:";
-    result << car.amountOfFuel;
-    return result;
+    result << this -> amountOfFuel;
 
 }
 
-//przeładowania operatorów zapisu do pliku i czytania z pliku
-std::ofstream &operator<<(std::ofstream &result, const Car &car) {
-    result << car.brand << "\n";
-    result << car.model << "\n";
-    result << car.color << "\n";
-    result << car.state << "\n";
-    result << car.amountOfFuel << "\n";
-    result << car.fuelConsumption << "\n";
-    result << car.bootCapacity << "\n";
-    result << car.mileage << "\n";
-    return result;
-}
-
-std::ifstream &operator>>(std::ifstream &result, Car &car) {
-    result >> car.brand;
-    result >> car.model;
-    result >> car.color;
-    result >> car.state;
-    result >> car.amountOfFuel;
-    result >> car.fuelConsumption;
-    result >> car.bootCapacity;
-    result >> car.mileage;
-    return result;
-    }
+//std::ifstream &operator>>(std::ifstream &result, Car &car) {
+//    result >> car.brand;
+//    result >> car.model;
+//    result >> car.color;
+//    result >> car.state;
+//    result >> car.amountOfFuel;
+//    result >> car.fuelConsumption;
+//    result >> car.bootCapacity;
+//    result >> car.mileage;
+//    return result;
+//    }
 
 Car::Car() {}
 
@@ -97,7 +83,7 @@ Car::Car(const std::string &brand,
          int mileage) :
             MotorVehicle(brand, model,color, fuelConsumption, bootCapacity, state,amountOfFuel,mileage) {}
 
-int Car::getCapacity() {
+int Car::getCapacity() const {
     return bootCapacity;
 }
 
@@ -114,4 +100,33 @@ bool Car::isInstanceOf(VehicleSpecification *vehicleSpecification) {
            this->fuelConsumption == carSpecification->getFuelConsumption() &&
            this->bootCapacity == carSpecification->getBootCapacity();
 }
+
+std::string Car::shortString() const {
+    return "Samochód: " + this->brand + ", " + this->model;
+}
+
+void Car::writeToFile(std::ofstream &result) const {
+    result << "Samochód:"<< "\n";
+    result << this -> brand << "\n";
+    result << this ->model << "\n";
+    result << this ->color << "\n";
+    result << this ->state << "\n";
+    result << this ->amountOfFuel << "\n";
+    result << this ->fuelConsumption << "\n";
+    result << this ->bootCapacity << "\n";
+    result << this ->mileage << "\n";
+}
+
+void Car::readFromFile(std::ifstream &result)  {
+    result >> this -> brand;
+    result >> this ->model;
+    result >> this ->color;
+    result >> this ->state;
+    result >> this ->amountOfFuel;
+    result >> this ->fuelConsumption;
+    result >> this ->bootCapacity;
+    result >> this ->mileage;
+}
+
+
 

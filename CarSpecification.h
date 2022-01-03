@@ -30,7 +30,7 @@ public:
 
     int getBootCapacity() const;
 
-    friend std::ostream &operator<<(std::ostream &result, const CarSpecification carSpecification);
+    void shortPrint(std::ostream &result) const override;
 
     std::string getDescribedObjectName() override;
 };

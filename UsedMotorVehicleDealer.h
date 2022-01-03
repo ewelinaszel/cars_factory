@@ -10,11 +10,15 @@
 #include "MotorVehicle.h"
 
 class UsedMotorVehicleDealer {
+    std::string name;
     std::map<MotorVehicle*, double> availableModels;
     double margin;
     void decreaseMileage(MotorVehicle &motorVehicle);
 
 public:
+    UsedMotorVehicleDealer(const std::string &name, const std::map<MotorVehicle *, double> &availableModels,
+                           double margin);
+
     double estimatePrice(MotorVehicle& motorVehicle);
 
     double buyFromOwner(MotorVehicle& motorVehicle);
@@ -23,8 +27,7 @@ public:
 
     const std::map<MotorVehicle *, double> &getAvailableModels() const;
 
-
-
+    const std::string &getName() const;
 
 };
 

@@ -8,21 +8,22 @@
 #include "VehicleFactory.h"
 #include <vector>
 
-template <class T, class S>
 class SalesDepartment {
-    std::vector <S> listOfAvailableModels;
+    std::string name;
+    std::vector <VehicleSpecification*> listOfAvailableModels;
     VehicleFactory* vehicleFactory;
 public:
 
-    SalesDepartment();
+    const std::string &getName() const;
 
-    SalesDepartment(const std::vector<S> &listOfAvailableModels, VehicleFactory *vehicleFactory);
+    SalesDepartment(const std::string &name, const std::vector<VehicleSpecification*> &listOfAvailableModels,
+                    VehicleFactory *vehicleFactory);
 
-    const std::vector<S> &getListOfAvailableModels() const;
+    const std::vector<VehicleSpecification *> &getListOfAvailableModels() const;
 
-    void orderCar(S vehicleSpecification);
+    void orderVehicle(VehicleSpecification* vehicleSpecification);
 
-    T* sellCar(S vehicleSpecification);
+    Vehicle* sellVehicle(VehicleSpecification* vehicleSpecification);
 
     VehicleFactory *getVehicleFactory() const;
 

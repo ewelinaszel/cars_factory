@@ -3,46 +3,41 @@
 //
 
 #include "SalesDepartment.h"
-#include "CarFactory.h"
-
-template <class T, class S>
-SalesDepartment<T, S>::SalesDepartment() {}
-
-template <class T, class S>
-SalesDepartment<T, S>::SalesDepartment(const std::vector<S> &listOfAvailableModels,
-                                    VehicleFactory *vehicleFactory):listOfAvailableModels(listOfAvailableModels),
-                                                                    vehicleFactory(vehicleFactory) {}
 
 
-template <class T, class S>
-void SalesDepartment<T, S>::orderCar(S vehicleSpecification) {
-     this -> vehicleFactory -> createVehicle(&vehicleSpecification);
+SalesDepartment::SalesDepartment(const std::string &name, const std::vector<VehicleSpecification*> &listOfAvailableModels,
+                                       VehicleFactory *vehicleFactory):name(name),
+                                                                       listOfAvailableModels(listOfAvailableModels),
+                                                                       vehicleFactory(vehicleFactory) {}
+
+void SalesDepartment::orderVehicle(VehicleSpecification* vehicleSpecification) {
+     this -> vehicleFactory -> createVehicle(vehicleSpecification);
 }
 
-template <class T, class S>
-const std::vector<S> &SalesDepartment<T, S>::getListOfAvailableModels() const {
-    return listOfAvailableModels;
-}
 
-template <class T, class S>
-T* SalesDepartment<T, S>::sellCar(S vehicleSpecification) {
-    Vehicle* vehicle = this -> vehicleFactory -> leaveFactory(&vehicleSpecification);
+Vehicle* SalesDepartment::sellVehicle(VehicleSpecification* vehicleSpecification) {
+    Vehicle* vehicle = this -> vehicleFactory -> leaveFactory(vehicleSpecification);
     if (vehicle == nullptr) {
-        this->vehicleFactory -> createVehicle(&vehicleSpecification);
-        vehicle = this->vehicleFactory -> leaveFactory(&vehicleSpecification);
+        this->vehicleFactory -> createVehicle(vehicleSpecification);
+        vehicle = this->vehicleFactory -> leaveFactory(vehicleSpecification);
     }
-    T* result = dynamic_cast<T*>(vehicle);
-    return result;
+    return vehicle;
 }
 
-template <class T, class S>
-VehicleFactory *SalesDepartment<T, S>::getVehicleFactory() const {
+VehicleFactory *SalesDepartment::getVehicleFactory() const {
     return vehicleFactory;
 }
 
-template<class T, class S>
-void SalesDepartment<T, S>::setVehicleFactory(VehicleFactory *vehicleFactory) {
+void SalesDepartment::setVehicleFactory(VehicleFactory *vehicleFactory) {
     SalesDepartment::vehicleFactory = vehicleFactory;
+}
+
+const std::string &SalesDepartment::getName() const {
+    return name;
+}
+
+const std::vector<VehicleSpecification *> &SalesDepartment::getListOfAvailableModels() const {
+    return listOfAvailableModels;
 }
 
 

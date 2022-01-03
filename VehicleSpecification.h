@@ -8,11 +8,11 @@
 #include <iostream>
 
 enum class Color {
-    BLACK,
-    WHITE,
-    GOLD,
-    SILVER,
-    RED
+    BLACK=0,
+    WHITE=1,
+    GOLD=2,
+    SILVER=3,
+    RED=4
 
 };
 
@@ -24,6 +24,8 @@ class VehicleSpecification {
 
 public:
     virtual std::string getDescribedObjectName() = 0;
+    virtual void shortPrint(std::ostream &result) const = 0;
+    friend std::ostream &operator<<(std::ostream &result, const VehicleSpecification* vehicleSpecification);
 };
 
 

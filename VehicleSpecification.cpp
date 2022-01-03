@@ -44,3 +44,8 @@ std::istream &operator>>(std::istream &result, Color &color) {
     }
     return result;
 }
+
+std::ostream &operator<<(std::ostream &result, const VehicleSpecification *vehicleSpecification) {
+    vehicleSpecification -> shortPrint(result);
+    return result;
+}

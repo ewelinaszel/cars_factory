@@ -17,17 +17,6 @@ Color CarSpecification::getColor() const {
     return color;
 }
 
-
-
-std::ostream &operator<<(std::ostream &result, const CarSpecification carSpecification) {
-    result << carSpecification.getBrand() << ", "
-           << carSpecification.getModel() << ", "
-           << carSpecification.getColor() << ", "
-           << carSpecification.getFuelConsumption() << "l/100km, "
-           << carSpecification.getBootCapacity() << "l";
-    return result;
-}
-
 CarSpecification::CarSpecification(const std::string &brand, const std::string &model, Color color,
                                    double fuelConsumption, int bootCapacity) : brand(brand), model(model), color(color),
                                                                                fuelConsumption(fuelConsumption),
@@ -43,4 +32,12 @@ int CarSpecification::getBootCapacity() const {
 
 std::string CarSpecification::getDescribedObjectName() {
     return "Car";
+}
+
+void CarSpecification::shortPrint(std::ostream &result) const {
+    result << this -> getBrand() << ", "
+           << this -> getModel() << ", "
+           << this -> getColor() << ", "
+           << this -> getFuelConsumption() << "l/100km, "
+           << this -> getBootCapacity() << "l";
 }

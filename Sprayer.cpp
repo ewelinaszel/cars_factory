@@ -4,6 +4,8 @@
 
 #include "Sprayer.h"
 
+Sprayer* Sprayer::_instance = nullptr;
+
 Sprayer::Sprayer() {}
 
 Sprayer::~Sprayer() {

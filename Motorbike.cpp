@@ -5,6 +5,8 @@
 #include "Motorbike.h"
 #include "MotorbikeSpecification.h"
 
+Motorbike::Motorbike() {}
+
 Motorbike::Motorbike(const std::string &brand,
                      const std::string &model,
                      Color color,
@@ -22,57 +24,56 @@ Motorbike::Motorbike(const std::string &brand,
                                      amountOfFuel,
                                      mileage) {}
 
-std::ostream &operator<<(std::ostream &result, const Motorbike &motorbike) {
+void Motorbike::print(std::ostream &result) const{
     result << "Marka motocyklu to:";
-    result << motorbike.brand;
+    result << this -> brand;
     result << "\nKolor:";
-    result << motorbike.color;
+    result << this -> color;
     result << "\nModel motocyklu to:";
-    result << motorbike.model;
+    result << this -> model;
     result << "\nAktualna ilość paliwa wynosi:";
-    result << motorbike.amountOfFuel;
-    if (motorbike.state == CarState::DRIVING) {
+    result << this -> amountOfFuel;
+    if (this -> state == CarState::DRIVING) {
         result << "\nMotocykl jest w ruchu.";
     } else {
         result << "\nMotocykl stoi.";
     }
     result << "\nSpalanie motocykla wynosi: ";
-    result << motorbike.fuelConsumption;
+    result << this -> fuelConsumption;
     result << "\nPojemność bagażnika w motocyklu wynosi:";
-    result << motorbike.bootCapacity;
+    result << this -> bootCapacity;
     result << "\nPrzebieg motocykla wynosi:";
-    result << motorbike.mileage;
+    result << this -> mileage;
     result << "\nAktaulna ilość paliwa wynosi:";
-    result << motorbike.amountOfFuel;
-    return result;
+    result << this -> amountOfFuel;
 
 }
+//
+//std::ofstream &operator<<(std::ofstream &result, const Motorbike &motorbike) {
+//    result << motorbike.brand << "\n";
+//    result << motorbike.model << "\n";
+//    result << motorbike.color << "\n";
+//    result << motorbike.state << "\n";
+//    result << motorbike.amountOfFuel << "\n";
+//    result << motorbike.fuelConsumption << "\n";
+//    result << motorbike.bootCapacity << "\n";
+//    result << motorbike.mileage << "\n";
+//    return result;
+//}
+//
+//std::ifstream &operator>>(std::ifstream &result, Motorbike &motorbike) {
+//    result >> motorbike.brand;
+//    result >> motorbike.model;
+//    result >> motorbike.color;
+//    result >> motorbike.state;
+//    result >> motorbike.amountOfFuel;
+//    result >> motorbike.fuelConsumption;
+//    result >> motorbike.bootCapacity;
+//    result >> motorbike.mileage;
+//    return result;
+//}
 
-std::ofstream &operator<<(std::ofstream &result, const Motorbike &motorbike) {
-    result << motorbike.brand << "\n";
-    result << motorbike.model << "\n";
-    result << motorbike.color << "\n";
-    result << motorbike.state << "\n";
-    result << motorbike.amountOfFuel << "\n";
-    result << motorbike.fuelConsumption << "\n";
-    result << motorbike.bootCapacity << "\n";
-    result << motorbike.mileage << "\n";
-    return result;
-}
-
-std::ifstream &operator>>(std::ifstream &result, Motorbike &motorbike) {
-    result >> motorbike.brand;
-    result >> motorbike.model;
-    result >> motorbike.color;
-    result >> motorbike.state;
-    result >> motorbike.amountOfFuel;
-    result >> motorbike.fuelConsumption;
-    result >> motorbike.bootCapacity;
-    result >> motorbike.mileage;
-    return result;
-}
-
-int Motorbike::getCapacity() {
+int Motorbike::getCapacity() const {
     return bootCapacity;
 }
 
@@ -85,3 +86,33 @@ bool Motorbike::isInstanceOf(VehicleSpecification *vehicleSpecification) {
                   this->fuelConsumption == motorbikeSpecification->getFuelConsumption() &&
                   this->bootCapacity == motorbikeSpecification->getBootCapacity();
 }
+
+std:: string Motorbike::shortString() const {
+    return "Motor: " + this->brand + ", " + this->model;
+}
+
+void Motorbike::writeToFile(std::ofstream &result) const {
+    result << "Motor:"<<"\n";
+    result << this -> brand << "\n";
+    result << this ->model << "\n";
+    result << this ->color << "\n";
+    result << this ->state << "\n";
+    result << this ->amountOfFuel << "\n";
+    result << this ->fuelConsumption << "\n";
+    result << this ->bootCapacity << "\n";
+    result << this ->mileage << "\n";
+}
+
+void Motorbike::readFromFile(std::ifstream &result)  {
+    result >> this -> brand;
+    result >> this ->model;
+    result >> this ->color;
+    result >> this ->state;
+    result >> this ->amountOfFuel;
+    result >> this ->fuelConsumption;
+    result >> this ->bootCapacity;
+    result >> this ->mileage;
+}
+
+
+

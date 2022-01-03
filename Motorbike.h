@@ -13,6 +13,8 @@
 class Motorbike: public MotorVehicle {
 
 public:
+    Motorbike();
+
     Motorbike(const std::string &brand,
               const std::string &model,
               Color color,
@@ -22,11 +24,14 @@ public:
               int amountOfFuel = 0,
               int mileage = 0);
 
-    friend std::ostream & operator << (std ::ostream & result ,const Motorbike &motorbike);
-    friend std::ofstream & operator << (std ::ofstream & result ,const Motorbike &motorbike);
-    friend std::ifstream & operator >> (std::ifstream &result, Motorbike &motorbike);
+    void print(std ::ostream & result) const override;
+    std::string shortString() const override;
+    void writeToFile(std::ofstream &result) const override;
+    void readFromFile(std::ifstream &result) override;
+//    friend std::ofstream & operator << (std ::ofstream & result ,const Motorbike &motorbike);
+//    friend std::ifstream & operator >> (std::ifstream &result, Motorbike &motorbike);
 
-    int getCapacity() override;
+    int getCapacity() const override;
 
     bool isInstanceOf(VehicleSpecification *vehicleSpecification) override;
 };

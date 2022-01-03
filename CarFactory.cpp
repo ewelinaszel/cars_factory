@@ -3,7 +3,6 @@
 //
 
 #include "CarFactory.h"
-#include "SalesDepartment.h"
 
 CarFactory::CarFactory() : VehicleFactory() {}
 

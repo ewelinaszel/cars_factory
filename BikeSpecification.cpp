@@ -23,12 +23,11 @@ int BikeSpecification::getBasketCapacity() const {
     return basketCapacity;
 }
 
-std::ostream &operator<<(std::ostream &result, const BikeSpecification bikeSpecification) {
-    result << bikeSpecification.getBrand() << ", "
-           << bikeSpecification.getModel() << ", "
-           << bikeSpecification.getColor() << ", "
-           << bikeSpecification.getBasketCapacity() << "l";
-    return result;
+void BikeSpecification::shortPrint(std::ostream &result) const {
+    result << this -> getBrand() << ", "
+           << this -> getModel() << ", "
+           << this -> getColor() << ", "
+           << this -> getBasketCapacity() << "l";
 }
 
 std::string BikeSpecification::getDescribedObjectName() {

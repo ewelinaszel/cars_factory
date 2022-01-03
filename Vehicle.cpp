@@ -57,5 +57,20 @@ void Vehicle::setColor(Color color) {
     Vehicle::color = color;
 }
 
+std::ostream &operator << (std::ostream &result, const Vehicle &vehicle) {
+    vehicle.print(result);
+    return result;
+}
+
+std::ofstream &operator << (std::ofstream &result, const Vehicle &vehicle){
+    vehicle.writeToFile(result);
+    return result;
+}
+
+std::ifstream &operator >> (std::ifstream &result, Vehicle &vehicle){
+    vehicle.readFromFile(result);
+    return result;
+}
+
 
 
