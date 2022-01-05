@@ -4,7 +4,7 @@
 
 #include "VehicleFactory.h"
 
-//usuwanie zakupionego samochodu o danej specyfikacji z inwentarza samochodów dostępnych w fabryce
+//usuwanie zakupionego pojazdu o danej specyfikacji z inwentarza samochodów dostępnych w fabryce
 Vehicle *VehicleFactory::leaveFactory(VehicleSpecification *vehicleSpecification) {
     Vehicle *vehiclePointer = nullptr;
     for (std::vector<Vehicle *>::iterator it = inventory.begin(); it != inventory.end(); ++it) {
@@ -28,7 +28,7 @@ VehicleFactory::~VehicleFactory() {
 
 std::ostream &operator<<(std::ostream &result, const VehicleFactory &vehicleFactory) {
     if (vehicleFactory.inventory.empty()) {
-        std::cout << "Brak pojazdów w fabryce" << std::endl;
+        result << "Brak pojazdów w fabryce" << std::endl;
     } else {
         result << vehicleFactory.getType() << ":";
         for (Vehicle *vehicle: vehicleFactory.inventory) {
@@ -53,7 +53,7 @@ std::ifstream &operator>>(std::ifstream &result, VehicleFactory &vehicleFactory)
     std::vector<Vehicle *> inventoryFromFile;
     for (int i = 0; i < size; i++) {
         Vehicle *vehicle = vehicleFactory.createDummyVehicle();
-        //tmp exists only to skip serialized vehicle type
+        //tmp exists only to skip vehicle type
         std::string tmp;
         result >> tmp;
         result >> *vehicle;

@@ -40,7 +40,7 @@ std::istream &operator>>(std::istream &result, Color &color) {
     } else if (colorString == "Czerwony") {
         color = Color::RED;
     } else {
-        std::cout << "Cannot read color: " << colorString << std::endl;
+        throw std::ios_base::failure("Nie mozna odczytać koloru z napisu \"" + colorString + "\"");
     }
     return result;
 }

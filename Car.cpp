@@ -16,7 +16,7 @@ void Car::print(std::ostream &result) const {
     result << this -> model;
     result << "\nAktualna ilość paliwa wynosi:";
     result << this -> amountOfFuel;
-    if (this -> state == CarState::DRIVING) {
+    if (this -> state == VehicleState::DRIVING) {
         result << "\nSamochód jest w ruchu.";
     } else {
         result << "\nSamochód stoi.";
@@ -40,7 +40,7 @@ Car::Car(const std::string &brand,
          double fuelConsumption,
          int bootCapacity,
          int amountOfFuel,
-         CarState state,
+         VehicleState state,
          int mileage) :
             MotorVehicle(brand, model,color, fuelConsumption, bootCapacity, state,amountOfFuel,mileage) {}
 

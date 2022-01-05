@@ -5,7 +5,7 @@
 #include "Bike.h"
 #include "BikeSpecification.h"
 
-Bike::Bike(const std::string &brand, const std::string &model, Color color, BikeBasket *bikeBasket, CarState state)
+Bike::Bike(const std::string &brand, const std::string &model, Color color, BikeBasket *bikeBasket, VehicleState state)
         : Vehicle(brand, model, color, state), bikeBasket(bikeBasket) {}
 
 
@@ -23,17 +23,17 @@ bool Bike::isInstanceOf(VehicleSpecification *vehicleSpecification) {
 }
 
 void Bike::stop() {
-    if (this->state == CarState::STANDING) {
+    if (this->state == VehicleState::STANDING) {
         throw std::runtime_error("Rower już stoi w miejscu.");
     }
-    this->state = CarState::STANDING;
+    this->state = VehicleState::STANDING;
 }
 
 void Bike::drive(double distance) {
-    if (this->state == CarState::DRIVING) {
+    if (this->state == VehicleState::DRIVING) {
         throw std::runtime_error("Rower jest już w ruchu");
     }
-    this->state = CarState::DRIVING;
+    this->state = VehicleState::DRIVING;
 }
 
 void Bike::print(std::ostream &result) const {
@@ -43,7 +43,7 @@ void Bike::print(std::ostream &result) const {
     result << this -> color;
     result << "\nModel roweru:";
     result << this -> model;
-    if (this -> state == CarState::DRIVING) {
+    if (this -> state == VehicleState::DRIVING) {
         result << "\nRower jest w ruchu.";
     } else {
         result << "\nRower stoi.";

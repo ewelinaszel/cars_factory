@@ -20,14 +20,16 @@ std::string LINE_PREFIX = "  ";
 
 struct UIContext {
     std::vector<SalesDepartment *> salesDepartments;
-    std::vector<UsedMotorVehicleDealer *> usedMotorVehicleDealers;
+    std::vector<UsedMotorVehicleDealer<MotorVehicle> *> usedMotorVehicleDealers;
+    std::vector<UsedMotorVehicleDealer<Car> *> usedCarsDealers;
 
     MotorVehicle *currentMotorVehicle;
     Bike *currentBike;
 
     //Where we are:
     SalesDepartment *currentSalesDepartment = nullptr;
-    UsedMotorVehicleDealer *currentMotorVehiclesDealer = nullptr;
+    UsedMotorVehicleDealer<MotorVehicle> *currentMotorVehiclesDealer = nullptr;
+    UsedMotorVehicleDealer<Car> *currentCarsDealer = nullptr;
 };
 
 
@@ -62,15 +64,22 @@ UIContext createUIContext() {
             new MotorbikeFactory{}};
 
 
-    UsedMotorVehicleDealer *usedMotorVehicleDealer1 = new UsedMotorVehicleDealer("KomisKowalski",
-                                                                                 std::map<MotorVehicle *, double>(),
-                                                                                 0.2);
+    UsedMotorVehicleDealer<MotorVehicle> *usedMotorVehicleDealer1 = new UsedMotorVehicleDealer<MotorVehicle>(
+            "KomisKowalski",
+            std::map<MotorVehicle *, double>(),
+            0.2);
+
+    UsedMotorVehicleDealer<Car> *usedCarsDealer1 = new UsedMotorVehicleDealer<Car>("KomisSamochodówNowak",
+                                                                                   std::map<Car *, double>(),
+                                                                                   0.2);
+
     UIContext uiContext;
     uiContext.salesDepartments.push_back(salesDepartment1);
     uiContext.salesDepartments.push_back(salesDepartment2);
     uiContext.salesDepartments.push_back(salesDepartment3);
     uiContext.salesDepartments.push_back(salesDepartment4);
     uiContext.usedMotorVehicleDealers.push_back(usedMotorVehicleDealer1);
+    uiContext.usedCarsDealers.push_back(usedCarsDealer1);
     uiContext.currentMotorVehicle = nullptr;
     uiContext.currentBike = nullptr;
     return uiContext;
@@ -120,8 +129,11 @@ void produceVehicle(SalesDepartment *currentSalesDepartment, std::istream *input
     }
     catch (const std::out_of_range &oor) {
         int n = currentSalesDepartment->getListOfAvailableModels().size();
-        std::cout << LINE_PREFIX << "Niepoprawny numer specyfikacji " << i
+        std::cerr << LINE_PREFIX << "Niepoprawny numer specyfikacji " << i
                   << ". Index powinien mieścić się w zakresie [1, " << n << "]" << std::endl;
+    }
+    catch (std::invalid_argument &e) {
+        std::cerr << e.what() << std::endl;
     }
 }
 
@@ -130,19 +142,27 @@ void buyVehicle(UIContext &uiContext, std::istream *inputStream) {
     int i;
     *inputStream >> i;
 
+    VehicleSpecification *chosenVehicleSpecification;
     try {
-        VehicleSpecification *chosenVehicleSpecification = uiContext.currentSalesDepartment->getListOfAvailableModels().at(
-                i - 1);
-        Vehicle *producedVehicle = uiContext.currentSalesDepartment->sellVehicle(chosenVehicleSpecification);
-        //na pewno wyprodukowany pojazd jest Rowerem albo Pojazdem silnikowym - jedna z konwersji zwróci nullptr
-        uiContext.currentMotorVehicle = dynamic_cast<MotorVehicle *>(producedVehicle);
-        uiContext.currentBike = dynamic_cast<Bike *>(producedVehicle);
+        chosenVehicleSpecification = uiContext.currentSalesDepartment->getListOfAvailableModels().at(i - 1);
     }
     catch (const std::out_of_range &oor) {
         int n = uiContext.currentSalesDepartment->getListOfAvailableModels().size();
-        std::cout << LINE_PREFIX << "Niepoprawny numer specyfikacji " << i
+        std::cerr << LINE_PREFIX << "Niepoprawny numer specyfikacji " << i
                   << ". Index powinien mieścić się w zakresie [1, " << n << "]" << std::endl;
+        return;
     }
+    Vehicle *producedVehicle;
+    try {
+        producedVehicle = uiContext.currentSalesDepartment->sellVehicle(chosenVehicleSpecification);
+    }
+    catch (std::invalid_argument &e) {
+        std::cerr << e.what() << std::endl;
+        return;
+    }
+    //na pewno wyprodukowany pojazd jest Rowerem albo Pojazdem silnikowym - jedna z konwersji zwróci nullptr
+    uiContext.currentMotorVehicle = dynamic_cast<MotorVehicle *>(producedVehicle);
+    uiContext.currentBike = dynamic_cast<Bike *>(producedVehicle);
 }
 
 void startMyVehicle(Vehicle *vehicle, std::istream *inputStream) {
@@ -156,7 +176,7 @@ void startMyVehicle(Vehicle *vehicle, std::istream *inputStream) {
         vehicle->drive(distance);
     }
     catch (std::runtime_error &re) {
-        std::cout << re.what() << std::endl;
+        std::cerr << re.what() << std::endl;
     }
 }
 
@@ -168,7 +188,7 @@ void stopMyVehicle(Vehicle *vehicle) {
         vehicle->stop();
     }
     catch (std::runtime_error &re) {
-        std::cout << re.what() << std::endl;
+        std::cerr << re.what() << std::endl;
     }
 }
 
@@ -183,7 +203,10 @@ void fillMyMotorVehicle(MotorVehicle *motorVehicle, std::istream *inputStream) {
         motorVehicle->fill(amountOfFuel);
     }
     catch (std::invalid_argument &e) {
-        std::cout << e.what() << std::endl;
+        std::cerr << e.what() << std::endl;
+    }
+    catch (std::runtime_error &e) {
+        std::cerr << e.what() << std::endl;
     }
 }
 
@@ -242,7 +265,11 @@ void readFactoryFromFile(SalesDepartment *salesDepartment, std::istream *inputSt
         return;
     }
 
-    file >> *vehicleFactoryFromFile;
+    try {
+        file >> *vehicleFactoryFromFile;
+    } catch (std::ios_base::failure &f) {
+        std::cerr << "Nie można poprawnie wczytać fabryki z pliku." << std::endl << "Powód: " << f.what() << std::endl;
+    }
     file.close();
 
     salesDepartment->setVehicleFactory(vehicleFactoryFromFile);
@@ -264,18 +291,36 @@ void readMyCarFromFile(UIContext &uiContext, std::istream *inputStream) {
     getline(file, readLine);
     if (readLine == "Samochód:") {
         Car *carFromFile = new Car();
-        file >> *carFromFile;
-        file.close();
+        try {
+            file >> *carFromFile;
+        }
+        catch (std::ios_base::failure &f) {
+            std::cerr << "Nie można poprawnie wczytać samochodu z pliku." << std::endl << "Powód: " << f.what()
+                      << std::endl;
+            return;
+        }
         uiContext.currentMotorVehicle = carFromFile;
     } else if (readLine == "Motor:") {
         Motorbike *motorbikeFromFile = new Motorbike();
-        file >> *motorbikeFromFile;
-        file.close();
+        try {
+            file >> *motorbikeFromFile;
+        }
+        catch (std::ios_base::failure &f) {
+            std::cerr << "Nie można poprawnie wczytać motoru z pliku." << std::endl << "Powód: " << f.what()
+                      << std::endl;
+            return;
+        }
         uiContext.currentMotorVehicle = motorbikeFromFile;
     } else if (readLine == "Rower:") {
         Bike *bikeFromFile = new Bike();
-        file >> *bikeFromFile;
-        file.close();
+        try {
+            file >> *bikeFromFile;
+        }
+        catch (std::ios_base::failure &f) {
+            std::cerr << "Nie można poprawnie wczytać roweru z pliku." << std::endl << "Powód: " << f.what()
+                      << std::endl;
+            return;
+        }
         uiContext.currentBike = bikeFromFile;
     } else {
         std::cout << "Nie mozna odczytac z pliku" << std::endl;
@@ -286,34 +331,66 @@ void readMyCarFromFile(UIContext &uiContext, std::istream *inputStream) {
 
 void estimatePriceOfMyVehicle(UIContext &uiContext, std::istream *inputStream) {
     if (checkIfCurrentMotorVehicleNullptr(uiContext)) { return; }
-    int estimatedPrice = uiContext.currentMotorVehiclesDealer->estimatePrice(*uiContext.currentMotorVehicle);
+    int estimatedPrice;
+    try {
+        //tylko jeden może być nie nullem w jednym czasie
+        if (uiContext.currentMotorVehiclesDealer != nullptr) {
+            estimatedPrice = uiContext.currentMotorVehiclesDealer->estimatePrice(*uiContext.currentMotorVehicle);
+        } else {
+            estimatedPrice = uiContext.currentCarsDealer->estimatePrice(*uiContext.currentMotorVehicle);
+        }
+    } catch (std::invalid_argument &e) {
+        std::cerr << e.what() << std::endl;
+        return;
+    }
     std::cout << "Oszacowana cena wynoi: " << estimatedPrice << "zł" << std::endl;
 }
 
 void sellMyMotorVehicle(UIContext &uiContext, std::istream *inputStream) {
     if (checkIfCurrentMotorVehicleNullptr(uiContext)) { return; }
-    double soldPrice = uiContext.currentMotorVehiclesDealer->buyFromOwner(*uiContext.currentMotorVehicle);
+    double soldPrice;
+    try {
+        //tylko jeden może być nie nullem w jednym czasie
+        if (uiContext.currentMotorVehiclesDealer != nullptr) {
+            soldPrice = uiContext.currentMotorVehiclesDealer->buyFromOwner(*uiContext.currentMotorVehicle);
+        } else {
+            soldPrice = uiContext.currentCarsDealer->buyFromOwner(*uiContext.currentMotorVehicle);
+        }
+    } catch (std::invalid_argument &e) {
+        std::cerr << e.what() << std::endl;
+        return;
+    }
     std::cout << "Twoj pojazd został sprzedany za: " << soldPrice << std::endl;
     uiContext.currentMotorVehicle = nullptr;
 }
 
-void showVehicleInDealerList(UsedMotorVehicleDealer *currentUsedMotorVehicleDealer) {
-    std::map<MotorVehicle *, double> availableModels = currentUsedMotorVehicleDealer->getAvailableModels();
+template<class T>
+void showVehicleInDealerList(UsedMotorVehicleDealer<T> *currentUsedMotorVehicleDealer) {
+    std::map<T *, double> availableModels = currentUsedMotorVehicleDealer->getAvailableModels();
 
     if (availableModels.empty()) {
         std::cout << LINE_PREFIX << "Komis nie posiada obecnie żadnych modeli możliwych do kupienia" << std::endl;
         return;
     }
     int i = 0;
-    for (std::map<MotorVehicle *, double>::iterator it = availableModels.begin();
-         it != availableModels.end(); ++it) {
 
+    for (auto it = availableModels.begin(); it != availableModels.end(); ++it) {
         std::cout << LINE_PREFIX << "[" << ++i << "] " << it->first->shortString() << " cena:" << it->second
                   << std::endl;
     }
 }
 
-void buyCarFromDealer(UIContext &uiContext, std::istream *inputStream) {
+void showVehicleInDealerList(UIContext &uiContext) {
+    //tylko jeden może być nie nullem w jednym czasie
+    if (uiContext.currentMotorVehiclesDealer != nullptr) {
+        showVehicleInDealerList(uiContext.currentMotorVehiclesDealer);
+    } else {
+        showVehicleInDealerList(uiContext.currentCarsDealer);
+    }
+}
+
+template <class T>
+void buyCarFromDealer(UIContext &uiContext, std::istream *inputStream, UsedMotorVehicleDealer<T>* currentMotorVehiclesDealer) {
     std::cout << "Podaj index: ";
     int chosenIndex;
     *inputStream >> chosenIndex;
@@ -321,20 +398,28 @@ void buyCarFromDealer(UIContext &uiContext, std::istream *inputStream) {
     double cost;
     *inputStream >> cost;
 
-    std::map<MotorVehicle *, double>::const_iterator it = uiContext.currentMotorVehiclesDealer->getAvailableModels().begin();
+    auto it = currentMotorVehiclesDealer->getAvailableModels().begin();
     std::advance(it, chosenIndex - 1);
-    MotorVehicle *motorVehicle = it->first;
+    T *motorVehicle = it->first;
     try {
-        uiContext.currentMotorVehicle = uiContext.currentMotorVehiclesDealer->sellToClient(motorVehicle, cost);
+        uiContext.currentMotorVehicle = currentMotorVehiclesDealer->sellToClient(motorVehicle, cost);
     }
     catch (std::runtime_error &e) {
-        std::cout << e.what();
+        std::cerr << e.what();
     }
     catch (std::invalid_argument &e) {
-        std::cout << e.what() << " Sprzedaż zakończona niepowodzeniem" << std::endl;
+        std::cerr << e.what() << " Sprzedaż zakończona niepowodzeniem" << std::endl;
     }
 }
 
+void buyCarFromDealer(UIContext &uiContext, std::istream *inputStream) {
+    //tylko jeden może być nie nullem w jednym czasie
+    if (uiContext.currentMotorVehiclesDealer != nullptr) {
+        buyCarFromDealer(uiContext, inputStream, uiContext.currentMotorVehiclesDealer);
+    } else {
+        buyCarFromDealer(uiContext, inputStream, uiContext.currentCarsDealer);
+    }
+}
 
 void changeColorOfVehicle(UIContext &uiContext, std::istream *inputStream) {
     // zmienia kolor posiadanego pojazdu silnikowego
@@ -347,7 +432,7 @@ void changeColorOfVehicle(UIContext &uiContext, std::istream *inputStream) {
     int chosenNumber;
     std::cout << "Wybierz na jaki kolor polakierować pojazd:";
     *inputStream >> chosenNumber;
-    if (chosenNumber >= 0 && chosenNumber < 4) {
+    if (chosenNumber >= 0 && chosenNumber <= 4) {
         Color chosenColor = static_cast<Color>(chosenNumber);
         if (checkIfCurrentMotorVehicleNullptr(uiContext)) { return; }
         Sprayer::getInstance()->changeColor(*uiContext.currentMotorVehicle, chosenColor);
@@ -367,7 +452,7 @@ void createNewSalesDepartment(UIContext &uiContext, std::istream *inputStream) {
 
     std::string salesDepartmentName;
     std::cout << "Podaj nazwę salonu:";
-    *inputStream >> salesDepartmentName; //todo wpisywanie ze spacją
+    std::getline(std::cin >> std::ws, salesDepartmentName);
     std::cout << "Wybierz jaki typ pojazdów będzie dostępny w Twoim salonie:" << std::endl;
     std::cout << "[0] Samochody" << std::endl;
     std::cout << "[1] Motocykle" << std::endl;
@@ -432,7 +517,7 @@ void showUsedMotorVehicleDealerMenu() {
     std::cout << std::endl;
     std::cout << "Wybierz interesującą Cię opcje:" << std::endl;
     std::cout << "[0] Wyjdź" << std::endl;
-    std::cout << "[1] Wyceń mój pojazd (...silnikowy" << std::endl;
+    std::cout << "[1] Wyceń mój pojazd silnikowy" << std::endl;
     std::cout << "[2] Sprzedaj mój pojazd silnikowy" << std::endl;
     std::cout << "[3] Wypisz listę dostęnych pojazdów silnikowych" << std::endl;
     std::cout << "[4] Kup pojazd silnikowy" << std::endl;
@@ -452,9 +537,9 @@ void showMotorVehicleMenu() {
     std::cout << "Wybierz interesującą Cię opcje:" << std::endl;
     std::cout << "[0] Wyjdź" << std::endl;
     std::cout << "[1] Wypisz aktualny stan" << std::endl;
-    std::cout << "[2] Jedziemy! *" << std::endl;
-    std::cout << "[3] Zatrzymaj się! *" << std::endl;
-    std::cout << "[4] Tankuj! *" << std::endl;
+    std::cout << "[2] Jedziemy! " << std::endl;
+    std::cout << "[3] Zatrzymaj się! " << std::endl;
+    std::cout << "[4] Tankuj! " << std::endl;
     std::cout << std::endl;
 }
 
@@ -476,7 +561,7 @@ void showAdministrationMenu() {
     std::cout << "[2] Zapisz mój rower do pliku" << std::endl;
     std::cout << "[3] Wczytaj mój pojazd silnikowy z pliku" << std::endl;
     std::cout << "[4] Wczytaj mój rower z pliku" << std::endl;
-    std::cout << "[5] Stworzyć nowy salon" << std::endl; //todo
+    std::cout << "[5] Stworzyć nowy salon" << std::endl;
     std::cout << "[6] Stworzyć nowy komis" << std::endl; //todo
     std::cout << std::endl;
 }
@@ -534,7 +619,7 @@ void enterUsedMotorVehicleDealerMenu(UIContext &uiContext, std::istream *inputSt
                 sellMyMotorVehicle(uiContext, inputStream);
                 break;
             case 3:
-                showVehicleInDealerList(uiContext.currentMotorVehiclesDealer);
+                showVehicleInDealerList(uiContext);
                 break;
             case 4:
                 buyCarFromDealer(uiContext, inputStream);
@@ -640,12 +725,6 @@ void enterAdministrationMenu(UIContext &uiContext, std::istream *inputStream) {
                 break;
             case 6:
                 break;
-            case 7:
-
-                break;
-            case 8:
-
-                break;
             default:
                 std::cout << "Opcja o podanym numerze nie istnieje" << std::endl;
         }
@@ -658,17 +737,22 @@ void enterAdministrationMenu(UIContext &uiContext, std::istream *inputStream) {
 
 void enterSpecificPlace(UIContext &uiContext, std::istream *inputStream) {
 
-    //todo wyświetlić opcje
     std::cout << "Dokąd chcesz się udać?" << std::endl;
     int i = 0;
     for (SalesDepartment *sd: uiContext.salesDepartments) {
         std::cout << "[" << i << "] " << sd->getName() << std::endl;
         i++;
     }
-    for (UsedMotorVehicleDealer *vd: uiContext.usedMotorVehicleDealers) {
+    for (UsedMotorVehicleDealer<MotorVehicle> *vd: uiContext.usedMotorVehicleDealers) {
         std::cout << "[" << i << "] " << vd->getName() << std::endl;
         i++;
     }
+
+    for (UsedMotorVehicleDealer<Car> *vd: uiContext.usedCarsDealers) {
+        std::cout << "[" << i << "] " << vd->getName() << std::endl;
+        i++;
+    }
+
     std::cout << "[" << i << "] " << "Lakiernik" << std::endl;
     i++;
 
@@ -697,12 +781,22 @@ void enterSpecificPlace(UIContext &uiContext, std::istream *inputStream) {
         }
         i++;
     }
-    for (UsedMotorVehicleDealer *vd: uiContext.usedMotorVehicleDealers) {
+    for (UsedMotorVehicleDealer<MotorVehicle> *vd: uiContext.usedMotorVehicleDealers) {
 
         if (i == placeNumber) {
             uiContext.currentMotorVehiclesDealer = vd;
             enterUsedMotorVehicleDealerMenu(uiContext, inputStream);
             uiContext.currentMotorVehiclesDealer = nullptr;
+            return;
+        }
+        i++;
+    }
+
+    for (UsedMotorVehicleDealer<Car> *vd: uiContext.usedCarsDealers) {
+        if (i == placeNumber) {
+            uiContext.currentCarsDealer = vd;
+            enterUsedMotorVehicleDealerMenu(uiContext, inputStream);
+            uiContext.currentCarsDealer = nullptr;
             return;
         }
         i++;
@@ -740,7 +834,6 @@ int main(int argc, char *argv[]) {
     for (int i = 1; i < argc; i++) {
         if (std::string(argv[i]) == "-f" && i + 1 < argc) {
             inputFileName = new std::string(argv[i + 1]);
-            // std::cout<<"Zanaleziono opcje -f " << *inputFileName << std::endl;
             break;
         }
     }

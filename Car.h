@@ -13,9 +13,6 @@
 #include "MotorVehicle.h"
 
 
-
-//std::ostream & operator<<(std ::ostream & result ,const CarState &carState);
-
 class Car: public MotorVehicle {
 
 public:
@@ -27,7 +24,7 @@ public:
         double fuelConsumption,
         int bootCapacity,
         int amountOfFuel = 0,
-        CarState state = CarState::STANDING,
+        VehicleState state = VehicleState::STANDING,
         int mileage = 0);
 
     ~Car();

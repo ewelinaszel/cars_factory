@@ -4,25 +4,25 @@
 
 #include "Vehicle.h"
 
-std::ostream &operator<<(std::ostream &result, const CarState &carState) {
+std::ostream &operator<<(std::ostream &result, const VehicleState &carState) {
     switch (carState) {
-        case CarState::STANDING:
+        case VehicleState::STANDING:
             result << "Standing";
             break;
-        case CarState::DRIVING:
+        case VehicleState::DRIVING:
             result << "Driving";
             break;
     }
     return result;
 }
 
-std::istream &operator>>(std::istream &result, CarState &carState) {
+std::istream &operator>>(std::istream &result, VehicleState &carState) {
     std::string stateString;
     result >> stateString;
     if (stateString == "Standing") {
-        carState = CarState::STANDING;
+        carState = VehicleState::STANDING;
     } else if (stateString == "Driving") {
-        carState = CarState::DRIVING;
+        carState = VehicleState::DRIVING;
     }
     return result;
 }
@@ -30,11 +30,11 @@ std::istream &operator>>(std::istream &result, CarState &carState) {
 
 Vehicle::Vehicle() {}
 
-CarState Vehicle::getState() const {
+VehicleState Vehicle::getState() const {
     return state;
 }
 
-Vehicle::Vehicle(const std::string &brand, const std::string &model, Color color, CarState state) : brand(
+Vehicle::Vehicle(const std::string &brand, const std::string &model, Color color, VehicleState state) : brand(
         brand), model(model), state(state), color(color) {}
 
 Vehicle::~Vehicle() {

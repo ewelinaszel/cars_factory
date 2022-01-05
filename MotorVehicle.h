@@ -18,14 +18,14 @@ protected:
     int mileage;
 
 public:
-    explicit MotorVehicle( const std::string &brand,
-                  const std::string &model,
-                  Color color,
-                  double fuelConsumption,
-                  int bootCapacity,
-                  CarState state,
-                  int amountOfFuel,
-                  int mileage);
+    explicit MotorVehicle(const std::string &brand,
+                          const std::string &model,
+                          Color color,
+                          double fuelConsumption,
+                          int bootCapacity,
+                          VehicleState state,
+                          int amountOfFuel,
+                          int mileage);
 
     explicit MotorVehicle();
 

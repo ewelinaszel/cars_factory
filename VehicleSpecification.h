@@ -8,12 +8,11 @@
 #include <iostream>
 
 enum class Color {
-    BLACK=0,
-    WHITE=1,
-    GOLD=2,
-    SILVER=3,
-    RED=4
-
+    BLACK,
+    WHITE,
+    GOLD,
+    SILVER,
+    RED
 };
 
 std::ostream &operator<<(std::ostream &result, const Color color);

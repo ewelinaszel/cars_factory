@@ -26,9 +26,10 @@ public:
 
     virtual Vehicle *leaveFactory(VehicleSpecification *vehicleSpecification);
 
-    //todo przywrócić poprawne dziaøanie operatorów zapisu i odczytu z pliku dla fabryki
     friend std::ostream &operator<<(std::ostream &result, const VehicleFactory &carFactory);
+
     friend std::ofstream &operator<<(std::ofstream &result, const VehicleFactory &carFactory);
+
     friend std::ifstream & operator >> (std::ifstream &result, VehicleFactory &carFactory);
 
 };

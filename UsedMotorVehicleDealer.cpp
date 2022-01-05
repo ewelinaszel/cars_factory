@@ -3,12 +3,20 @@
 //
 
 #include "UsedMotorVehicleDealer.h"
+#include "Motorbike.h"
+#include "Car.h"
 
-const std::map<MotorVehicle *, double> &UsedMotorVehicleDealer::getAvailableModels() const {
+template class UsedMotorVehicleDealer<MotorVehicle>;
+template class UsedMotorVehicleDealer<Motorbike>;
+template class UsedMotorVehicleDealer<Car>;
+
+template<class T>
+const std::map<T *, double> &UsedMotorVehicleDealer<T>::getAvailableModels() const {
     return availableModels;
 }
 
-MotorVehicle *UsedMotorVehicleDealer::sellToClient(MotorVehicle *motorVehicle, double price) {
+template<class T>
+T *UsedMotorVehicleDealer<T>::sellToClient(T *motorVehicle, double price) {
     if (this->availableModels.find(motorVehicle) == this->availableModels.end()){
         throw std::runtime_error("Brak modelu na stanie");
     }
@@ -21,21 +29,32 @@ MotorVehicle *UsedMotorVehicleDealer::sellToClient(MotorVehicle *motorVehicle, d
     return motorVehicle;
 }
 
-double UsedMotorVehicleDealer::buyFromOwner(MotorVehicle &motorVehicle) {
-    double estimatedPrice = this->estimatePrice(motorVehicle);
-//    this->availableModels.insert(std::pair<MotorVehicle*, double>(&motorVehicle,estimatedPrice*(1+this->margin)));
-    this->availableModels[&motorVehicle] = estimatedPrice * (1 + this->margin);
-    if (motorVehicle.getBrand() == "BMW"){
-        this->decreaseMileage(motorVehicle);
+template<class T>
+double UsedMotorVehicleDealer<T>::buyFromOwner(MotorVehicle &motorVehicle) {
+    T* vehicle = dynamic_cast<T*>(&motorVehicle);
+    if(vehicle == nullptr) {
+        throw std::invalid_argument("Invalid type of vehicle.");
+    }
+
+    double estimatedPrice = this->estimatePrice(*vehicle);
+    this->availableModels[vehicle] = estimatedPrice * (1 + this->margin);
+    if (vehicle -> getBrand() == "BMW"){
+        this->decreaseMileage(*vehicle);
     }
     return estimatedPrice;
 }
 
-double UsedMotorVehicleDealer::estimatePrice(MotorVehicle &motorVehicle) {
-    double estimatedPrice = 0;
-    if (motorVehicle.getBrand() == "BMW") {
+template<class T>
+double UsedMotorVehicleDealer<T>::estimatePrice(MotorVehicle &motorVehicle) {
+    T* vehicle = dynamic_cast<T*>(&motorVehicle);
+    if(vehicle == nullptr) {
+        throw std::invalid_argument("Invalid type of vehicle.");
+    }
+
+    double estimatedPrice;
+    if (vehicle -> getBrand() == "BMW") {
         estimatedPrice = 20000;
-    } else if (motorVehicle.getBrand() == "Chevrolet") {
+    } else if (vehicle -> getBrand() == "Chevrolet") {
         estimatedPrice = 15000;
     } else {
         estimatedPrice = 10000;
@@ -45,14 +64,17 @@ double UsedMotorVehicleDealer::estimatePrice(MotorVehicle &motorVehicle) {
     return estimatedPrice;
 }
 
-void UsedMotorVehicleDealer::decreaseMileage(MotorVehicle &motorVehicle) {
+template<class T>
+void UsedMotorVehicleDealer<T>::decreaseMileage(T &motorVehicle) {
     motorVehicle.setMileage(motorVehicle.getMileage()/2);
 }
 
-UsedMotorVehicleDealer::UsedMotorVehicleDealer(const std::string &name,
-                                               const std::map<MotorVehicle *, double> &availableModels, double margin)
+template<class T>
+UsedMotorVehicleDealer<T>::UsedMotorVehicleDealer(const std::string &name,
+                                               const std::map<T *, double> &availableModels, double margin)
         : name(name), availableModels(availableModels), margin(margin) {}
 
-const std::string &UsedMotorVehicleDealer::getName() const {
+template<class T>
+const std::string &UsedMotorVehicleDealer<T>::getName() const {
     return name;
 }

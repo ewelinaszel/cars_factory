@@ -9,23 +9,24 @@
 #include <map>
 #include "MotorVehicle.h"
 
+template<class T>
 class UsedMotorVehicleDealer {
     std::string name;
-    std::map<MotorVehicle*, double> availableModels;
+    std::map<T*, double> availableModels;
     double margin;
-    void decreaseMileage(MotorVehicle &motorVehicle);
+    void decreaseMileage(T &motorVehicle);
 
 public:
-    UsedMotorVehicleDealer(const std::string &name, const std::map<MotorVehicle *, double> &availableModels,
+    UsedMotorVehicleDealer(const std::string &name, const std::map<T *, double> &availableModels,
                            double margin);
 
     double estimatePrice(MotorVehicle& motorVehicle);
 
     double buyFromOwner(MotorVehicle& motorVehicle);
 
-    MotorVehicle* sellToClient(MotorVehicle *motorVehicle, double price);
+    T* sellToClient(T *motorVehicle, double price);
 
-    const std::map<MotorVehicle *, double> &getAvailableModels() const;
+    const std::map<T *, double> &getAvailableModels() const;
 
     const std::string &getName() const;
 

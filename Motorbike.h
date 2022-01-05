@@ -20,7 +20,7 @@ public:
               Color color,
               double fuelConsumption,
               int capacity,
-              CarState state = CarState::STANDING,
+              VehicleState state = VehicleState::STANDING,
               int amountOfFuel = 0,
               int mileage = 0);
 

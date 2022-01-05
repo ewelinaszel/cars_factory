@@ -9,6 +9,7 @@
 #include <fstream>
 #include "Vehicle.h"
 
+//Singleton
 class Sprayer {
 protected:
     static Sprayer *_instance;

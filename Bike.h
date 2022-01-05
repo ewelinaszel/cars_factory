@@ -15,7 +15,7 @@ public:
     Bike();
 
     Bike(const std::string &brand, const std::string &model, Color color,
-         BikeBasket *bikeBasket = nullptr, CarState state = CarState::STANDING);
+         BikeBasket *bikeBasket = nullptr, VehicleState state = VehicleState::STANDING);
 
     int getCapacity() const override;
 
