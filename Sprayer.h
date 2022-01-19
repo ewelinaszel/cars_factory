@@ -2,8 +2,8 @@
 // Created by Ewelina Szeliga on 27.12.2021.
 //
 
-#ifndef SZELIGAEWELINA_ETAP1_SPRAYER_H
-#define SZELIGAEWELINA_ETAP1_SPRAYER_H
+#ifndef SZELIGAEWELINA_ETAP2_SPRAYER_H
+#define SZELIGAEWELINA_ETAP2_SPRAYER_H
 
 
 #include <fstream>
@@ -27,4 +27,4 @@ public:
 };
 
 
-#endif //SZELIGAEWELINA_ETAP1_SPRAYER_H
+#endif //SZELIGAEWELINA_ETAP2_SPRAYER_H

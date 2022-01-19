@@ -2,8 +2,8 @@
 // Created by Ewelina Szeliga on 28.11.2021.
 //
 
-#ifndef SZELIGAEWELINA_ETAP1_CARFACTORY_H
-#define SZELIGAEWELINA_ETAP1_CARFACTORY_H
+#ifndef SZELIGAEWELINA_ETAP2_CARFACTORY_H
+#define SZELIGAEWELINA_ETAP2_CARFACTORY_H
 
 
 #include <vector>
@@ -20,4 +20,4 @@ public:
     void createVehicle(VehicleSpecification *vehicleSpecification) override;
 };
 
-#endif //SZELIGAEWELINA_ETAP1_CARFACTORY_H
+#endif //SZELIGAEWELINA_ETAP2_CARFACTORY_H

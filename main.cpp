@@ -65,11 +65,11 @@ UIContext createUIContext() {
 
 
     UsedMotorVehicleDealer<MotorVehicle> *usedMotorVehicleDealer1 = new UsedMotorVehicleDealer<MotorVehicle>(
-            "KomisKowalski",
+            "Komis Pojazdów Silnikowych Kowalski",
             std::map<MotorVehicle *, double>(),
             0.2);
 
-    UsedMotorVehicleDealer<Car> *usedCarsDealer1 = new UsedMotorVehicleDealer<Car>("KomisSamochodówNowak",
+    UsedMotorVehicleDealer<Car> *usedCarsDealer1 = new UsedMotorVehicleDealer<Car>("Komis Samochodów Nowak",
                                                                                    std::map<Car *, double>(),
                                                                                    0.2);
 
@@ -211,7 +211,9 @@ void fillMyMotorVehicle(MotorVehicle *motorVehicle, std::istream *inputStream) {
 }
 
 void saveMyVehicleToFile(Vehicle *vehicle, std::istream *inputStream) {
-    if (vehicle == nullptr) { return; }//dopisac
+    if (vehicle == nullptr) {
+        std::cout<<"Nie posiadasz pojazdu, ktory mozna zapisać do pliku."<<std::endl;
+    }
 
     std::string fileName;
     std::cout << "Podaj nazwę pliku" << std::endl;
@@ -452,7 +454,7 @@ void createNewSalesDepartment(UIContext &uiContext, std::istream *inputStream) {
 
     std::string salesDepartmentName;
     std::cout << "Podaj nazwę salonu:";
-    std::getline(std::cin >> std::ws, salesDepartmentName);
+    std::getline(*inputStream >> std::ws, salesDepartmentName);
     std::cout << "Wybierz jaki typ pojazdów będzie dostępny w Twoim salonie:" << std::endl;
     std::cout << "[0] Samochody" << std::endl;
     std::cout << "[1] Motocykle" << std::endl;
@@ -485,6 +487,44 @@ void createNewSalesDepartment(UIContext &uiContext, std::istream *inputStream) {
     }
     uiContext.salesDepartments.push_back(salesDepartmentFromUser);
 
+}
+
+void createNewUsedMotorVehicleDealer(UIContext &uiContext, std::istream *inputStream) {
+
+    std::string usedMotorVehicleDealerName;
+    std::cout << "Podaj nazwę komisu:";
+    std::getline(*inputStream >> std::ws, usedMotorVehicleDealerName);
+
+    double margin;
+    std::cout << "Podaj marżę (wyrażoną jako ułamek o jaki powiększana jest cena z przedziału [0, 1]): " << std::endl;
+    *inputStream >> margin;
+    if (margin < 0 || margin > 1) {
+        std::cerr << "Niepoprawna wartość marży." << std::endl;
+    }
+
+    std::cout << "Wybierz jakim typ pojazdów komis będzie handlował:" << std::endl;
+    std::cout << "[0] Samochody" << std::endl;
+    std::cout << "[1] Pojazdy silnikowe (Samochody + Motocykle)" << std::endl;
+    int commandNumber = getCommandFromConsole(inputStream);
+    UsedMotorVehicleDealer<Car> *usedCarsDealer;
+    UsedMotorVehicleDealer<MotorVehicle> *usedMotorVehicleDealer;
+    switch (commandNumber) {
+        case 0:
+            usedCarsDealer = new UsedMotorVehicleDealer<Car>(usedMotorVehicleDealerName,
+                                                                                          std::map<Car*, double>(),
+                                                                                                  margin);
+            uiContext.usedCarsDealers.push_back(usedCarsDealer);
+            break;
+        case 1:
+            usedMotorVehicleDealer = new UsedMotorVehicleDealer<MotorVehicle>(usedMotorVehicleDealerName,
+                                                                                         std::map<MotorVehicle*, double>(),
+                                                                                         margin);
+            uiContext.usedMotorVehicleDealers.push_back(usedMotorVehicleDealer);
+            break;
+        default:
+            std::cout << "Niepoprawny numer.";
+            return;
+    }
 }
 
 //****************************************************
@@ -562,7 +602,7 @@ void showAdministrationMenu() {
     std::cout << "[3] Wczytaj mój pojazd silnikowy z pliku" << std::endl;
     std::cout << "[4] Wczytaj mój rower z pliku" << std::endl;
     std::cout << "[5] Stworzyć nowy salon" << std::endl;
-    std::cout << "[6] Stworzyć nowy komis" << std::endl; //todo
+    std::cout << "[6] Stworzyć nowy komis" << std::endl;
     std::cout << std::endl;
 }
 
@@ -724,6 +764,7 @@ void enterAdministrationMenu(UIContext &uiContext, std::istream *inputStream) {
                 createNewSalesDepartment(uiContext, inputStream);
                 break;
             case 6:
+                createNewUsedMotorVehicleDealer(uiContext, inputStream);
                 break;
             default:
                 std::cout << "Opcja o podanym numerze nie istnieje" << std::endl;
@@ -802,7 +843,6 @@ void enterSpecificPlace(UIContext &uiContext, std::istream *inputStream) {
         i++;
     }
 
-    //Lakiernik
     if (i == placeNumber) {
         enterSprayerMenu(uiContext, inputStream);
         return;
@@ -864,13 +904,5 @@ int main(int argc, char *argv[]) {
                 std::cout << "Opcja o podanym numerze nie istnieje" << std::endl;
         }
     }
-
-    // todo posprzątać po sobie?
     return 0;
 }
-
-//todo opcje w admin menu do tworzenia salonów i komisów
-//todo rozrzerzyć UIContext o predefiniowane listy modeli ora przykładowe salony (Rowerów, Motorów) DONE
-//todo obsługa sytuacji wyjątkowych (wyjątki) DONE
-//todo template w UsedMotorVehicleDealer
-//todo zeby paliwa nie była nieskończona ilość

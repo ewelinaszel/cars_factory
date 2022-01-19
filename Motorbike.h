@@ -2,8 +2,8 @@
 // Created by Ewelina Szeliga on 17.12.2021.
 //
 
-#ifndef SZELIGAEWELINA_ETAP1_MOTORBIKE_H
-#define SZELIGAEWELINA_ETAP1_MOTORBIKE_H
+#ifndef SZELIGAEWELINA_ETAP2_MOTORBIKE_H
+#define SZELIGAEWELINA_ETAP2_MOTORBIKE_H
 
 #include "MotorVehicle.h"
 #include "MotorbikeSpecification.h"
@@ -38,4 +38,4 @@ public:
 };
 
 
-#endif //SZELIGAEWELINA_ETAP1_MOTORBIKE_H
+#endif //SZELIGAEWELINA_ETAP2_MOTORBIKE_H

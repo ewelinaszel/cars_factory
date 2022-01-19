@@ -2,8 +2,8 @@
 // Created by Ewelina Szeliga on 17.12.2021.
 //
 
-#ifndef SZELIGAEWELINA_ETAP1_BIKE_H
-#define SZELIGAEWELINA_ETAP1_BIKE_H
+#ifndef SZELIGAEWELINA_ETAP2_BIKE_H
+#define SZELIGAEWELINA_ETAP2_BIKE_H
 
 #include "Vehicle.h"
 #include "BikeBasket.h"
@@ -35,4 +35,4 @@ public:
 };
 
 
-#endif //SZELIGAEWELINA_ETAP1_BIKE_H
+#endif //SZELIGAEWELINA_ETAP2_BIKE_H

@@ -2,8 +2,8 @@
 // Created by Ewelina Szeliga on 27.11.2021.
 //
 
-#ifndef SZELIGAEWELINA_ETAP1_CAR_H
-#define SZELIGAEWELINA_ETAP1_CAR_H
+#ifndef SZELIGAEWELINA_ETAP2_CAR_H
+#define SZELIGAEWELINA_ETAP2_CAR_H
 
 
 #include <string>
@@ -44,4 +44,4 @@ public:
 };
 
 
-#endif //SZELIGAEWELINA_ETAP1_CAR_H
+#endif //SZELIGAEWELINA_ETAP2_CAR_H

@@ -6,6 +6,10 @@
 
 
 void MotorVehicle::fill(int AmountOfFuel) {
+    if (this -> state == VehicleState::DRIVING) {
+        throw std::runtime_error("Nie można tankować gdy pojazd jest w ruchu");
+    }
+
     if (AmountOfFuel == 0) {
         throw std::runtime_error("Brak substancji napędowej.");
     } else if (AmountOfFuel < 0) {
