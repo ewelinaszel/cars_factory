@@ -1,0 +1,30 @@
+Program umożliwia wybranie samochodu z dostępnej listy specyfikacji samochodów oraz jego wyprodukowanie.
+Program składa się z 4 klas. Po wybraniu samochodu zleca się jego wykonanie w fabryce samochodów, chyba że jest 
+już wyprodukowany i nie został sprzedany. Klasa SalesDepartment odpowiada za sprzedaż samochodów, natomiast klasa 
+CarSpecification przechowuje specyfikację wybranego samochodu.
+W programie użyto wektora w celu przechowania listy specyfikacji modeli samochodów oraz inwentarza z samochodami 
+wyprodukowanymi i dostępnymi w fabryce. W funkcji głównej używana jest struktura UIContext, która agreguje wskaźnik
+na aktualnie posiadany samochód oraz obiekt klasy SalesDepartment - głównym powodem jej utworzenie jest poprawienie 
+czytelności kodu. Wykorzystano także typy wyliczeniowe enum dla kolorów i stanu pojadu. W programie istnieją 
+zaprzyjaźnione opartory przeładowania wyświetlania na ekran, wczytywania i zczytywania z pliku. W projekcie możemy 
+wybrać, również opcje "jedź" i "tankuj". Jedź oznacza, że jeśli w baku jest odpowiednia ilość paliwa 
+samochód jest w ruchu do czasu jego zatrzymania przy pomocy metody stop. Przy każdym wywołaniu metody jedź 
+zmniejsza się ilość paliwa. Program umożliwia również wczytywanie obiektów fabryki oraz aktualnego samochodu z pliku.
+---------------------------------------------------------------------------------------------------------------------
+W etapie drugim zostały dodane klasy bazowe Vehicle, a także Factory i VehicleSpecification. Po klasie Vehicle
+dziedziczy klasa Bike oraz MotorVehicle. Hierarchię dziedziczenia wprowadzono również dla fabryk oraz specyfikacji
+pojazdów, jednak pominięto w nich fakt klasy analogiczne do MotorVehicle, gdyż dla nich MotorVehicleFactory 
+i MotorVehicleSpecification nie miałoby sensu i tylko zbytnio skomplikowałoby kod.
+Dodatkowo w klasie Bike z racji, że koszyk jest opcjonalny została utworzona klasa BikeBasket przechowująca informację
+o pojemności bagażnika. Utworzono również klasę Sprayer(lakiernik), która jest singletonem. Lakiernik może polakierować
+dowolny pojazd, natomiast z poziomu interfejsu użytkownika ograniczono się wyłącznie do lakierowania pojazdów silnikowych,
+z uwagi na fakt że lakierowanie roweru nie jest standardowym przypadkiem.
+Program uruchamia się z argumentem wiersza poleceń. Aby podać plik wsadowy należy wpisać ścieżkę do niego po 
+argumencie "-f" (np. w wierszu poleceń należy wpisać "./SzeligaEwelina-etap2.exe -f stdin.txt"). 
+W kodzie programu umieszczono osługę wyjątków std::invalid_argument, std::runtime_error,std::ios_base::failure oraz
+std::out_of_range. Komis jest klasą szablonową parametryzowaną typem pojazdów silnikowych jakich skup i sprzedaż
+prowadzi. Oznacza to, że możemy mieć w systemie zarówno komis pojazdów silnikowych jak i tylko samochodów lub tylko
+motorów. Jeżeli spróbujemy sprzedać pojazd silnikowy typu samochód do komisu wyłącznie motorów, komis ten wyrzuci 
+odpowiedni wyjątek informujący, iż nie prowadzi skupu samochodów. 
+Z racji iż użytkownik nie ma bezpośredniego dostępu do fabryki, z poziomu interfejsu użytkownika istnieje zamiast tego
+możliwość stworzenia więcej niż jednego salonu, dla którego z punktu widzenia kodowego tworzy się również fabryka.
